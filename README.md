@@ -1,5 +1,14 @@
 # RE4 Master Editor
 
+![Version](https://img.shields.io/badge/Version-3.0.0-red?style=flat-square)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Winlator%20%7C%20Linux%20Wine-blue?style=flat-square)
+![Game](https://img.shields.io/badge/Game-RE4%20UHD%202014-darkred?style=flat-square)
+![Language](https://img.shields.io/badge/Language-AR%20%7C%20EN-green?style=flat-square)
+![Codes](https://img.shields.io/badge/Codes-180%2B-orange?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
+![Python](https://img.shields.io/badge/Built%20With-Python-blue?style=flat-square&logo=python&logoColor=white)
+![Source Code](https://img.shields.io/badge/Source_Code-Claude_AI-purple?style=flat-square)
+
 ## التعريف
 
 Master Editor هي أداة Modding موحدة للعبة Resident Evil 4 Ultimate HD Edition، تجمع عدة أدوات ومحررات داخل برنامج واحد بواجهة بسيطة ومنظمة، بحيث يمكنك تعديل أغلب أنظمة اللعبة بدون الحاجة لاستخدام برامج HEX مثل HxD بشكل مباشر.
@@ -195,12 +204,13 @@ Master Editor هي أداة Modding موحدة للعبة Resident Evil 4 Ultima
 <img width="1136" height="700" alt="Screenshot_20260514_172710" src="https://github.com/user-attachments/assets/ee80c472-b9f3-4490-b569-2a8c8ab06d7a" />
 
 ---
-
 # الحقوق
 
 ## المشروع
 
-- Owner & Developer: YEMENI
+- Project Owner: YEMENI
+- Source Code: Claude AI
+- Project Design & RE4 Research: YEMENI
 
 ## مساهمات خارجية
 
@@ -215,22 +225,9 @@ Master Editor هي أداة Modding موحدة للعبة Resident Evil 4 Ultima
 
 ## الذكاء الاصطناعي
 
-تمت كتابة أجزاء كبيرة من السورس كود باستخدام Claude AI.
+تمت كتابة السورس كود الخاص بالمشروع باستخدام Claude AI.
 
-لكن جميع عمليات:
-
-- تصميم الأقسام.
-- تحديد الوظائف.
-- تحليل ملفات اللعبة.
-- اكتشاف الأخطاء.
-- اختبار الميزات.
-- مراجعة النتائج.
-- تحديد بنية الأدوات.
-- البحث والتطوير الخاص بـ Resident Evil 4.
-- توجيه الذكاء الاصطناعي أثناء التطوير.
-
-تمت بواسطة YEMENI.
-
+جميع تصميم الأقسام، تحديد الوظائف، تحليل ملفات Resident Evil 4، اختبار الميزات، اكتشاف الأخطاء، مراجعة النتائج، وتوجيه عملية التطوير تمت بواسطة YEMENI.
 ---
 
 ## الإبلاغ عن المشاكل
