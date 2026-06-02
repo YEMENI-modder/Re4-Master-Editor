@@ -1,15 +1,16 @@
 # RE4 Master Editor
 
-![Version](https://img.shields.io/badge/Version-3.0.0-red?style=flat-square)
+[![Version](https://img.shields.io/badge/Version-3.0.0-red?style=flat-square)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases/latest)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Winlator%20%7C%20Linux%20Wine-blue?style=flat-square)
-![Game](https://img.shields.io/badge/Game-RE4%20UHD%202014-darkred?style=flat-square)
+[![Game](https://img.shields.io/badge/Game-RE4%20UHD%202014-darkred?style=flat-square)](https://store.steampowered.com/app/254700/Resident_Evil_4_2004/)
 ![Language](https://img.shields.io/badge/Language-AR%20%7C%20EN-green?style=flat-square)
 ![Codes](https://img.shields.io/badge/Codes-180%2B-orange?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
-![Python](https://img.shields.io/badge/Built%20With-Python-blue?style=flat-square&logo=python&logoColor=white)
-![Source Code](https://img.shields.io/badge/Source_Code-Claude_AI-purple?style=flat-square)
+[![Built With Python](https://img.shields.io/badge/Built%20With-Python-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
+[![Source Code](https://img.shields.io/badge/Source_Code-Claude_AI-purple?style=flat-square)](https://www.anthropic.com/claude)
 ![Visitors](https://visitor-badge.laobi.icu/badge?page_id=YEMENI-modder/RE4-Master-Editor)
-[![Github All Releases](https://img.shields.io/github/downloads/YEMENI-modder/Re4-Master-Editor/total.svg)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases/latest)
+[![Github All Releases](https://img.shields.io/github/downloads/YEMENI-modder/Re4-Master-Editor/total.svg)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases)
+
 
 ## التعريف
 
