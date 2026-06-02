@@ -3,22 +3,21 @@ All rights reserved.
 
 1. Usage & Contributions:
 You are permitted to view, download, and test the source code for personal use. 
-Contributions to this project are welcome exclusively through Pull Requests (PRs) 
-to the official repository (https://github.com/YEMENI-modder/Re4-Master-Editor).
+Contributions to this project are welcome through Pull Requests (PRs) to the 
+official repository (https://github.com/YEMENI-modder/Re4-Master-Editor).
 
-2. Restrictions:
+2. Restrictions & Forking:
 - You are STRICTLY PROHIBITED from replicating, hosting, or redistributing 
   this source code, in whole or in part, under your own name or in a separate 
   public/private repository without explicit written permission from the author.
-- Forking the repository is permitted ONLY for the purpose of submitting Pull 
-  Requests back to this original project.
+- Creating a Fork of this repository is permitted ONLY after obtaining explicit 
+  permission from the project owner (YEMENI) and you MUST clearly retain and 
+  credit the original author's name in your repository.
 
 3. Third-Party & Proprietary Components:
 - The "Weapons & Items Editor" (WAIE) component is based on proprietary work by PLAYER7Z. 
 - In accordance with the developer's terms, the WAIE module is strictly CLOSED-SOURCE 
-  and is excluded from this public repository.
-- Any attempt to extract, decompile, or reverse engineer the WAIE system from the 
-  compiled binaries is strictly prohibited.
+  and is completely excluded from this public repository.
 
 Failure to comply with these terms will result in an immediate DMCA Takedown notice 
 filed against the infringing repository/platform.
