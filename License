@@ -1,23 +1,65 @@
 Copyright (c) 2026 YEMENI (ALYEMENI)
 All rights reserved.
 
-1. Usage & Contributions:
-You are permitted to view, download, and test the source code for personal use. 
-Contributions to this project are welcome through Pull Requests (PRs) to the 
-official repository (https://github.com/YEMENI-modder/Re4-Master-Editor).
+===============================================================================
+IMPORTANT NOTICE: This license applies EXCLUSIVELY to the Python source code (.py) 
+contained within this repository, NOT the compiled production executable (.exe).
+===============================================================================
 
-2. Restrictions & Forking:
-- You are STRICTLY PROHIBITED from replicating, hosting, or redistributing 
-  this source code, in whole or in part, under your own name or in a separate 
-  public/private repository without explicit written permission from the author.
-- Creating a Fork of this repository is permitted ONLY after obtaining explicit 
-  permission from the project owner (YEMENI) and you MUST clearly retain and 
-  credit the original author's name in your repository.
+1. Personal Usage & Modifications:
+You are fully permitted to download, view, test, and modify this Python source code 
+strictly for personal, private, and offline use.
 
-3. Third-Party & Proprietary Components:
-- The "Weapons & Items Editor" (WAIE) component is based on proprietary work by PLAYER7Z. 
-- In accordance with the developer's terms, the WAIE module is strictly CLOSED-SOURCE 
-  and is completely excluded from this public repository.
+2. Public Distribution, Forking & Scope of Modifications:
+Public forks, mirrors, redistributions, and derivative repositories require prior written permission. 
+However, the necessity of this permission depends strictly on the scope of your modifications:
 
-Failure to comply with these terms will result in an immediate DMCA Takedown notice 
-filed against the infringing repository/platform.
+- Minor Modifications (Permitted WITHOUT Permission): If your changes are minor—such as adding a 
+  new language translation (e.g., Portuguese) or adding a few new hex codes inside the Code Manager—you 
+  are permitted to fork, create a repository, or redistribute the code without prior authorization, 
+  provided that you clearly retain and credit YEMENI as the original author.
+  
+- Major Modifications (STRICTLY REQUIRES Permission): If your changes are extensive—such as redesigning 
+  the user interface, adding entirely new modules/sections, or rebuilding existing features from scratch—you 
+  MUST obtain explicit written permission from YEMENI before publishing or hosting the repository.
+
+- Additional Rule: Any permitted public derivative work or fork is strictly prohibited from being 
+  commercialized or sold; it must remain completely free and open-source.
+
+3. Contributions & Pull Requests (PRs):
+Contributions to this repository are welcome. If you submit a Pull Request (PR) and your code is 
+officially merged, you will be permanently credited for your specific feature/fix in both the 
+project's README.md and the in-app Credits section.
+
+4. The WAIE Component (Third-Party & Partnership Terms):
+- The "Weapons & Items Editor" (WAIE) module is a customized version integrated into this tool. 
+  The core logic and source code of WAIE were provided by PLAYER7Z. YEMENI redesigned its user 
+  interface and layout for tool compatibility.
+- Per the explicit request and terms of PLAYER7Z, the WAIE module is strictly CLOSED-SOURCE 
+  and is completely excluded from this public Python repository.
+- If you wish to obtain the complete source code including the WAIE component, you must contact 
+  PLAYER7Z directly. If they grant you explicit approval, YEMENI will provide you with the full 
+  unredacted source code.
+
+5. Disclaimer & Limitation of Liability (إخلاء المسؤولية):
+- If you modify this source code and encounter any system issues, errors, or hardware/software 
+  damage, the original developer (YEMENI) holds absolutely no liability or connection to what 
+  happened to your device.
+- This tool contains advanced functions that interface directly with system operations and require 
+  Administrative privileges (such as the Real-Time mode within the Code Manager that utilizes 
+  memory injection). This specific clause applies to BOTH the Python source code (.py) and the 
+  final compiled product (.exe). The tool and its author are not responsible for any adverse system 
+  behavior, as the software has been thoroughly tested across multiple environments and operating 
+  systems without causing any harm. Use at your own risk.
+
+
+6. Contact Information for Authorizations:
+To request permission for major forks, public redistribution, or full source inquiries, 
+contact YEMENI directly through these official channels:
+- Discord: 5j_o
+- Instagram: kklop555
+- Gmail: altmymwyd80@gmail.com
+
+Failure to comply with these terms, or redistributing this source code publicly outside 
+the permitted minor scope without confirmation, may result in copyright enforcement actions, 
+including DMCA takedown requests.
