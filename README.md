@@ -8,6 +8,7 @@
 ![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
 ![Python](https://img.shields.io/badge/Built%20With-Python-blue?style=flat-square&logo=python&logoColor=white)
 ![Source Code](https://img.shields.io/badge/Source_Code-Claude_AI-purple?style=flat-square)
+![Visitors](https://visitor-badge.laobi.icu/badge?page_id=YEMENI-modderRE4-Master-Editor)
 
 ## التعريف
 
