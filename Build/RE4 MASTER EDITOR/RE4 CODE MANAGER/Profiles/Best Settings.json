@@ -1,0 +1,33 @@
+{
+  "name": "Best Settings",
+  "description": "Recommended codes for best RE4 modding experience",
+  "codes": [
+    "pointer_edit",
+    "sanity_check",
+    "aev_type6",
+    "aev_fse",
+    "aev_ese",
+    "aev_auto_door",
+    "aev_cam",
+    "aev_checkpoint",
+    "aev_chain",
+    "aev_osd",
+    "aev_auto_type5",
+    "aev_option",
+    "aev_ita",
+    "aev_ear",
+    "aev_timer",
+    "etm_lever",
+    "spawn_enemies",
+    "em_ita_preload",
+    "rsert_order",
+    "loot_no_disappear",
+    "u3_esl",
+    "regen_esl",
+    "merchant_init",
+    "em_incompat_fix",
+    "fix_r100_crash",
+    "fix_r101_disappear",
+    "grey_screen_fix"
+  ]
+}
