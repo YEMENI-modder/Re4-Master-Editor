@@ -8,7 +8,7 @@
 ![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
 [![Built With Python](https://img.shields.io/badge/Built%20With-Python-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
 [![Source Code](https://img.shields.io/badge/Source_Code-Claude_AI-purple?style=flat-square)](https://www.anthropic.com/claude)
-![Visitors](https://visitor-badge.laobi.icu/badge?page_id=YEMENI-modder/RE4-Master-Editor)
+![Visitors](https://visitor-badge.laobi.icu/badge?page_id=YEMENI-modderRE4-Master-Editor)
 [![Github All Releases](https://img.shields.io/github/downloads/YEMENI-modder/Re4-Master-Editor/total.svg)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases)
 
 
