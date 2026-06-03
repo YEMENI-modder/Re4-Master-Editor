@@ -185,28 +185,6 @@ Master Editor هي أداة Modding موحدة للعبة Resident Evil 4 Ultima
 - نظام أقسام موحد لتسهيل الوصول إلى الأدوات.
 
 ---
-
-# لقطات من الأداة
-
-<img width="1278" height="550" alt="Screenshot_20260514_171206" src="https://github.com/user-attachments/assets/7afccc66-4403-442e-aab1-de3ba3aa2bc2" />
-
-<img width="1136" height="694" alt="Screenshot_20260514_171702" src="https://github.com/user-attachments/assets/3c2ce130-8bc6-43ed-9364-311699e9a817" />
-
-<img width="1148" height="700" alt="Screenshot_20260514_172054" src="https://github.com/user-attachments/assets/750cf28e-6154-4b87-a7fd-eb643c39a4bd" />
-
-<img width="1138" height="697" alt="Screenshot_20260514_172121" src="https://github.com/user-attachments/assets/f3644fe1-9d2e-4ef2-852a-0fa0dcadfb8c" />
-
-<img width="1122" height="700" alt="Screenshot_20260514_172259" src="https://github.com/user-attachments/assets/be17c570-d1b6-487a-8a9a-6969f3e0c983" />
-
-<img width="1136" height="696" alt="Screenshot_20260514_172335" src="https://github.com/user-attachments/assets/cb444b64-30b4-4be0-9785-7f73e8df371a" />
-
-<img width="1135" height="697" alt="Screenshot_20260514_172353" src="https://github.com/user-attachments/assets/38066fee-eaf6-4864-ac3c-f6d901b435e8" />
-
-<img width="1122" height="698" alt="Screenshot_20260514_172549" src="https://github.com/user-attachments/assets/d75de138-be16-48eb-a0da-b3364b5170de" />
-
-<img width="1136" height="700" alt="Screenshot_20260514_172710" src="https://github.com/user-attachments/assets/ee80c472-b9f3-4490-b569-2a8c8ab06d7a" />
-
----
 # الحقوق
 
 ## المشروع
