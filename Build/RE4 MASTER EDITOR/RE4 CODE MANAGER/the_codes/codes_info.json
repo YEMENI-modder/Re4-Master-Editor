@@ -1,0 +1,2624 @@
+{
+  "sections": [
+    {
+      "id": "necessary",
+      "label": "Necessary Codes",
+      "icon": "",
+      "label_en": "Necessary Codes"
+    },
+    {
+      "id": "aev",
+      "label": "AEV Codes",
+      "icon": "",
+      "label_en": "AEV Codes"
+    },
+    {
+      "id": "ita",
+      "label": "ITA Codes",
+      "icon": "",
+      "label_en": "ITA Codes"
+    },
+    {
+      "id": "dll_qingsheng",
+      "label": "DLL QINGSHENG Codes",
+      "icon": "",
+      "label_en": "DLL QINGSHENG Codes"
+    },
+    {
+      "id": "dll_raz0r",
+      "label": "DLL raz0r Codes",
+      "icon": "",
+      "label_en": "DLL raz0r Codes"
+    },
+    {
+      "id": "gameplay",
+      "label": "Gameplay Codes",
+      "icon": "",
+      "label_en": "Gameplay Codes"
+    },
+    {
+      "id": "enemy",
+      "label": "Enemy Codes",
+      "icon": "",
+      "label_en": "Enemy Codes"
+    },
+    {
+      "id": "room",
+      "label": "Room Codes",
+      "icon": "",
+      "label_en": "Room Codes"
+    },
+    {
+      "id": "general_fixes",
+      "label": "General Fixes Codes",
+      "icon": "",
+      "label_en": "General Fixes Codes"
+    },
+    {
+      "id": "memory",
+      "label": "Memory Codes",
+      "icon": "",
+      "label_en": "Memory Codes"
+    },
+    {
+      "id": "misc",
+      "label": "Misc Codes",
+      "icon": "",
+      "label_en": "Misc Codes"
+    }
+  ],
+  "codes": [
+    {
+      "id": "pointer_edit",
+      "section": "necessary",
+      "name": "POINTER EDIT",
+      "desc": "هاذا الكود مهم عشان تشتغل اغلب الأكواد",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "POINTER EDIT",
+      "desc_en": "Required for most codes to work",
+      "notes_en": []
+    },
+    {
+      "id": "sanity_check",
+      "section": "necessary",
+      "name": "Sanity Checking Function",
+      "desc": "الكود هاذا مهم جدا لكي يشتغل اكواد AEV-ITA",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Sanity Checking Function",
+      "desc_en": "Required for AEV-ITA codes to work",
+      "notes_en": []
+    },
+    {
+      "id": "aev_type6",
+      "section": "necessary",
+      "name": "AEV TYPE 6",
+      "desc": "هاذا الكود مهم لكي يتفعل AEV الخاص ب AEV-ITA",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV TYPE 6",
+      "desc_en": "Required for AEV-ITA to activate",
+      "notes_en": []
+    },
+    {
+      "id": "aev_fse",
+      "section": "aev",
+      "name": "AEV-FSE",
+      "desc": "هاذا الكود يربط لك ملف AEV مع FSE لكن إذا ما خاب ظني انه لا يشتغل اصلا",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": true,
+      "name_en": "AEV-FSE",
+      "desc_en": "Links AEV file with FSE",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ]
+    },
+    {
+      "id": "aev_ese",
+      "section": "aev",
+      "name": "AEV-ESE",
+      "desc": "الكود هاذا يربط لك AEV مع ESE",
+      "notes": [
+        "يتطلب كود AEV-FSE"
+      ],
+      "requires": [
+        "pointer_edit",
+        "aev_fse"
+      ],
+      "detectable": true,
+      "name_en": "AEV-ESE",
+      "desc_en": "Links AEV with ESE",
+      "notes_en": [
+        "Requires: AEV-FSE"
+      ]
+    },
+    {
+      "id": "aev_auto_door",
+      "section": "aev",
+      "name": "AEV - Auto-Door Block",
+      "desc": "للان لم أفهم فكرته",
+      "notes": [
+        "يتطلب كود AEV-FSE",
+        "يتطلب كود AEV-ESE"
+      ],
+      "requires": [
+        "pointer_edit",
+        "aev_fse",
+        "aev_ese"
+      ],
+      "detectable": true,
+      "name_en": "AEV - Auto-Door Block",
+      "desc_en": "Auto door blocking for AEV",
+      "notes_en": [
+        "Requires: AEV-FSE",
+        "Requires: AEV-ESE"
+      ]
+    },
+    {
+      "id": "aev_cam",
+      "section": "aev",
+      "name": "AEV-CAM",
+      "desc": "هاذا الكود يخليك تربط AEV مع الكميرا",
+      "notes": [
+        "يتطلب كود AEV-FSE",
+        "يتطلب كود AEV-ESE",
+        "يتطلب كود AEV - Auto-Door Block"
+      ],
+      "requires": [
+        "pointer_edit",
+        "aev_fse",
+        "aev_ese",
+        "aev_auto_door"
+      ],
+      "detectable": true,
+      "name_en": "AEV-CAM",
+      "desc_en": "Links AEV with the camera",
+      "notes_en": [
+        "Requires: AEV-FSE",
+        "Requires: AEV-ESE",
+        "Requires: AEV Auto-Door Block"
+      ]
+    },
+    {
+      "id": "aev_checkpoint",
+      "section": "aev",
+      "name": "AEV Checkpoint",
+      "desc": "يمديك تخلي لل AEV تشيكبونت",
+      "notes": [
+        "يتطلب كود AEV-FSE",
+        "يتطلب كود AEV-ESE",
+        "يتطلب كود AEV - Auto-Door Block",
+        "يتطلب كود AEV-CAM"
+      ],
+      "requires": [
+        "pointer_edit",
+        "aev_fse",
+        "aev_ese",
+        "aev_auto_door",
+        "aev_cam"
+      ],
+      "detectable": true,
+      "name_en": "AEV Checkpoint",
+      "desc_en": "Allows AEV to have checkpoints",
+      "notes_en": [
+        "Requires: AEV-FSE",
+        "Requires: AEV-ESE",
+        "Requires: AEV Auto-Door Block",
+        "Requires: AEV-CAM"
+      ]
+    },
+    {
+      "id": "aev_chain",
+      "section": "aev",
+      "name": "AEV CHAIN",
+      "desc": "الكود هاذا يربط بين AEV و AEV",
+      "notes": [
+        "يتطلب كود AEV-FSE",
+        "يتطلب كود AEV-ESE",
+        "يتطلب كود AEV - Auto-Door Block",
+        "يتطلب كود AEV-CAM",
+        "يتطلب كود AEV Checkpoint"
+      ],
+      "requires": [
+        "pointer_edit",
+        "aev_fse",
+        "aev_ese",
+        "aev_auto_door",
+        "aev_cam",
+        "aev_checkpoint"
+      ],
+      "detectable": true,
+      "name_en": "AEV CHAIN",
+      "desc_en": "Links AEV to AEV",
+      "notes_en": [
+        "Requires: AEV-FSE",
+        "Requires: AEV-ESE",
+        "Requires: AEV Auto-Door Block",
+        "Requires: AEV-CAM",
+        "Requires: AEV Checkpoint"
+      ]
+    },
+    {
+      "id": "aev_osd",
+      "section": "aev",
+      "name": "AEV-OSD",
+      "desc": "الكود هاذا يفعل لك ملف OSD",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV-OSD",
+      "desc_en": "Activates OSD file",
+      "notes_en": []
+    },
+    {
+      "id": "aev_auto_type5",
+      "section": "aev",
+      "name": "AEV AUTO TYPE 5",
+      "desc": "الكود هاذا يخلي الرسائل يمديها تكون تريقر",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV AUTO TYPE 5",
+      "desc_en": "Makes messages triggerable",
+      "notes_en": []
+    },
+    {
+      "id": "aev_option",
+      "section": "aev",
+      "name": "AEV OPTION",
+      "desc": "الكود هاذا يخلي يمديك تربط اكثر من AEV عن طريق MDT",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV OPTION",
+      "desc_en": "Link more than one AEV via MDT",
+      "notes_en": []
+    },
+    {
+      "id": "aev_ear",
+      "section": "aev",
+      "name": "AEV-EAR",
+      "desc": "هاذا الكود يخليك يمديك تربط EFF ب AEV (لا تسال ليه حاط EAR)",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV-EAR",
+      "desc_en": "Links EFF with AEV",
+      "notes_en": []
+    },
+    {
+      "id": "aev_timer",
+      "section": "aev",
+      "name": "AEV TIMER",
+      "desc": "الكود هاذا يخلي ال AEV له وقت عشان يشتغل",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV TIMER",
+      "desc_en": "Gives AEV a timer",
+      "notes_en": []
+    },
+    {
+      "id": "etm_lever",
+      "section": "aev",
+      "name": "Adding ETM Lever functionality",
+      "desc": "إصلاح مشكله ETS الليفر انه ما ينربط مع AEV",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Adding ETM Lever functionality",
+      "desc_en": "Fixes ETM lever not linking with AEV",
+      "notes_en": []
+    },
+    {
+      "id": "etm_lever_timer",
+      "section": "aev",
+      "name": "Adding ETM Lever Timer",
+      "desc": "يمديك تخلي للليفر وقت",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Adding ETM Lever Timer",
+      "desc_en": "Gives the lever a timer",
+      "notes_en": []
+    },
+    {
+      "id": "aev_ita",
+      "section": "aev",
+      "name": "AEV-ITA",
+      "desc": "هاذا الكود يخليك يمديك تربط AEV مع ITA",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\"",
+        "يتطلب كود Sanity Checking Function",
+        "يتطلب كود AEV TYPE 6"
+      ],
+      "requires": [
+        "pointer_edit",
+        "sanity_check",
+        "aev_type6"
+      ],
+      "detectable": true,
+      "name_en": "AEV-ITA",
+      "desc_en": "Links AEV with ITA",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT",
+        "Requires: Sanity Checking Function",
+        "Requires: AEV TYPE 6"
+      ]
+    },
+    {
+      "id": "universal_ets",
+      "section": "aev",
+      "name": "Universal ETS ID Access",
+      "desc": "الكود هاذا يخليك تربط غرفه بغرفه ثانيه",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Universal ETS ID Access",
+      "desc_en": "Links one room to another",
+      "notes_en": []
+    },
+    {
+      "id": "spawn_enemies",
+      "section": "ita",
+      "name": "Spawn Enemies from ITA",
+      "desc": "يمديك ترسبن اعداء من ITA",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\"",
+        "يتطلب كود Sanity Checking Function"
+      ],
+      "requires": [
+        "pointer_edit",
+        "sanity_check"
+      ],
+      "detectable": true,
+      "name_en": "Spawn Enemies from ITA",
+      "desc_en": "Spawn enemies from ITA",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT",
+        "Requires: Sanity Checking Function"
+      ]
+    },
+    {
+      "id": "enemy_persistence",
+      "section": "ita",
+      "name": "Enemy Spawn Persistence & ETS IDs",
+      "desc": "يمديك تخلي لل ITA لهم ID",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\"",
+        "عند التفعيل ستظهر رساله تسألك اذا انت مفعل EnableModExpansion"
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": true,
+      "dialog": "mod_expansion",
+      "name_en": "Enemy Spawn Persistence & ETS IDs",
+      "desc_en": "Give ITA enemies ETS IDs",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT",
+        "When enabled, you will be asked if EnableModExpansion is active"
+      ]
+    },
+    {
+      "id": "em_ita_preload",
+      "section": "ita",
+      "name": "EM ITA UDAS Pre-Load",
+      "desc": "يشيل تأخير لما عدو يرسبن",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "EM ITA UDAS Pre-Load",
+      "desc_en": "Removes delay when enemy spawns",
+      "notes_en": []
+    },
+    {
+      "id": "apply_dll_qingsheng",
+      "section": "dll_qingsheng",
+      "name": "APPLY DLL QINGSHENG",
+      "desc": "عشان يتفعل DLL QINGSHENG وبرضو لكي ينفتح كل الاكواد اللي تحت",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "APPLY DLL QINGSHENG",
+      "desc_en": "Activates DLL QINGSHENG and unlocks all codes below",
+      "notes_en": []
+    },
+    {
+      "id": "aev_sfd",
+      "section": "dll_qingsheng",
+      "name": "AEV-SFD",
+      "desc": "من AEV تتفعل كاتسين",
+      "notes": [],
+      "requires": [
+        "apply_dll_qingsheng"
+      ],
+      "detectable": true,
+      "name_en": "AEV-SFD",
+      "desc_en": "Trigger cutscenes from AEV",
+      "notes_en": []
+    },
+    {
+      "id": "sound_fix",
+      "section": "dll_qingsheng",
+      "name": "Adds missing sound (Chainsaw, Garrador, JJs) {Qingsheng}",
+      "desc": "برجع أصوات المنشاير وابو مخالب الخ - يتطلب XWB و XSB معدل (نسخه Qingsheng)",
+      "notes": [
+        "[!] الملف المعدل في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [
+        "apply_dll_qingsheng"
+      ],
+      "detectable": true,
+      "name_en": "Adds missing sound (Chainsaw, Garrador, JJs) {Qingsheng}",
+      "desc_en": "Restores sounds for chainsaw and Garrador (Qingsheng version)",
+      "notes_en": [
+        "[!] Check the Modified files folder: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ]
+    },
+    {
+      "id": "xwb_sideload_q",
+      "section": "dll_qingsheng",
+      "name": "XWB/XSB Sideload (QINGSHENG)",
+      "desc": "يمدي تسوي سايد لود لملفات الصوت",
+      "notes": [],
+      "requires": [
+        "apply_dll_qingsheng"
+      ],
+      "detectable": true,
+      "name_en": "XWB/XSB Sideload (QINGSHENG)",
+      "desc_en": "Sideload sound files",
+      "notes_en": []
+    },
+    {
+      "id": "apply_dll_raz0r",
+      "section": "dll_raz0r",
+      "name": "APPLY DLL RAZ0R",
+      "desc": "عشان يتفعل DLL RAZ0R وبرضو لكي ينفتح جميع الاكواد اللي تحت",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "APPLY DLL RAZ0R",
+      "desc_en": "Activates DLL RAZ0R and unlocks all codes below",
+      "notes_en": []
+    },
+    {
+      "id": "sound_fix_raz0r",
+      "section": "dll_raz0r",
+      "name": "Adds missing sound (Chainsaw, Garrador, JJs) {Raz0r}",
+      "desc": "برجع أصوات المنشاير وابو مخالب الخ - يتطلب XWB و XSB معدل (نسخه Raz0r)",
+      "notes": [
+        "[!] الملفات المعدلة في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "Adds missing sound (Chainsaw, Garrador, JJs) {Raz0r}",
+      "desc_en": "Restores sounds for chainsaw and Garrador (Raz0r version)",
+      "notes_en": [
+        "[!] Find the required files in \"Modified files\" folder"
+      ]
+    },
+    {
+      "id": "xwb_sideload_r",
+      "section": "dll_raz0r",
+      "name": "XWB/XSB Sideload (raz0r)",
+      "desc": "يمديك تسوي سايد لود لملفات الصوت",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "requires": [
+        "pointer_edit",
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "XWB/XSB Sideload (raz0r)",
+      "desc_en": "Sideload sound files",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ]
+    },
+    {
+      "id": "em_sideload",
+      "section": "dll_raz0r",
+      "name": "EM Sideload",
+      "desc": "يمديك تسوي سايد لود لملفات مودلز الاعداء",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "requires": [
+        "pointer_edit",
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "EM Sideload",
+      "desc_en": "Sideload enemy model files",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ]
+    },
+    {
+      "id": "raz0r_overlay",
+      "section": "dll_raz0r",
+      "name": "Raz0r DLL Overlay Removal",
+      "desc": "ازاله الصوره الذي تظهر اول ما تدخل اللعبه",
+      "notes": [],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "Raz0r DLL Overlay Removal",
+      "desc_en": "Removes the overlay shown at game start",
+      "notes_en": []
+    },
+    {
+      "id": "memory_sideload",
+      "section": "dll_raz0r",
+      "name": "Double File Load Fix",
+      "desc": "يصلح مشكلة تحميل ملفات الـ DLL مرتين",
+      "notes": [],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "Double File Load Fix",
+      "desc_en": "Fixes Companion DLL double file loading issue",
+      "notes_en": []
+    },
+    {
+      "id": "event_state",
+      "section": "dll_raz0r",
+      "name": "Event State Continuity Chain",
+      "desc": "يحفظ ال AEV حتى لو دخلت وطلعت",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "requires": [
+        "pointer_edit",
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "Event State Continuity Chain",
+      "desc_en": "Saves AEV state when entering and exiting",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ]
+    },
+    {
+      "id": "dll_key_fix",
+      "section": "dll_raz0r",
+      "name": "DLL Key Inconsistency Issue Fix",
+      "desc": "حل مشكله اللغه تصير غبيه وتنسى انك فتحت الباب بالمفتاح",
+      "notes": [],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "DLL Key Inconsistency Issue Fix",
+      "desc_en": "Fixes door forgetting you used a key",
+      "notes_en": []
+    },
+    {
+      "id": "companion_keyless",
+      "section": "dll_raz0r",
+      "name": "Companion DLL Keyless Unlock",
+      "desc": "يمديك تفتح ابواب بدون مفتاح",
+      "notes": [],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "Companion DLL Keyless Unlock",
+      "desc_en": "Open doors without a key",
+      "notes_en": []
+    },
+    {
+      "id": "auto_key",
+      "section": "dll_raz0r",
+      "name": "Automatic Key Unlock",
+      "desc": "ينفتح الباب بالمفتاح بدون ما تدخل الشنطه",
+      "notes": [],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "Automatic Key Unlock",
+      "desc_en": "Door opens with key without entering inventory",
+      "notes_en": []
+    },
+    {
+      "id": "key_no_msg",
+      "section": "dll_raz0r",
+      "name": "Key Unlock No Message No Cam",
+      "desc": "تقفيل أبواب بدون لا رساله ولا كميرا",
+      "notes": [],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "Key Unlock - No Message No Cam",
+      "desc_en": "Lock doors without message or camera",
+      "notes_en": []
+    },
+    {
+      "id": "enter_no_ashley",
+      "section": "gameplay",
+      "name": "Entering the doors without Ashley",
+      "desc": "يمديك تدخل الابواب بدون ما اشلي تكون جمبك",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Entering Doors Without Ashley",
+      "desc_en": "Enter doors without Ashley nearby",
+      "notes_en": []
+    },
+    {
+      "id": "knife_only",
+      "section": "gameplay",
+      "name": "A knife only from the bag",
+      "desc": "يمديك تستخدم سكين فقط من الشنطه - تحذير: اللعبه تكرش اذا اتقتلت بالمنشار",
+      "notes": [
+        "[!] تحذير: اللعبه تكرش اذا اتقتلت بالمنشار"
+      ],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Knife Only from Bag",
+      "desc_en": "Use knife only from inventory",
+      "notes_en": [
+        "[!] WARNING: Game will crash if killed by the chainsaw"
+      ]
+    },
+    {
+      "id": "disable_knife",
+      "section": "gameplay",
+      "name": "Disabling the knife",
+      "desc": "يوقف السكين - تضغط الزر ما تطلع",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Disable Knife",
+      "desc_en": "Knife button does nothing",
+      "notes_en": []
+    },
+    {
+      "id": "kick_mega",
+      "section": "gameplay",
+      "name": "Kick mega dr salvdor",
+      "desc": "يمديك تسوي كيك تيورا متار",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Kick Mega Dr. Salvador",
+      "desc_en": "Allows a mega kick",
+      "notes_en": []
+    },
+    {
+      "id": "rifle_scope",
+      "section": "gameplay",
+      "name": "Rifle - Keep in Scope after Shooting",
+      "desc": "يخلي الرايفل يطلق على طول بدون تعشيق بين كل طلقه وطلقه",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Rifle - Keep Scope After Shooting",
+      "desc_en": "Rifle fires continuously without re-scoping",
+      "notes_en": []
+    },
+    {
+      "id": "disable_suplex",
+      "section": "gameplay",
+      "name": "Disable Suplex",
+      "desc": "يغير السوبلكس الى كيك",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Disable Suplex",
+      "desc_en": "Changes suplex to kick",
+      "notes_en": []
+    },
+    {
+      "id": "no_laser",
+      "section": "gameplay",
+      "name": "No Laser",
+      "desc": "الاسلحه بدون ليزر - Pistols، Shotguns، TMP، Chikako",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "No Laser",
+      "desc_en": "Weapons without laser - Pistols, Shotguns, TMP, Chikako",
+      "notes_en": []
+    },
+    {
+      "id": "rsert_order",
+      "section": "enemy",
+      "name": "RSERT ORDER",
+      "desc": "يخلي الاعداء من التشيكبونت بدال المين منيو",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "RSERT ORDER",
+      "desc_en": "Enemies respawn from checkpoint instead of main menu",
+      "notes_en": []
+    },
+    {
+      "id": "aev_ashley_spawn",
+      "section": "aev",
+      "name": "Doorway AEV's Can Spawn/Despawn Ashley",
+      "desc": "AEV يمديه يرسبن او يخفي اشلي",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Doorway AEV - Spawn/Despawn Ashley",
+      "desc_en": "AEV can spawn or hide Ashley",
+      "notes_en": []
+    },
+    {
+      "id": "aev_type_a_mortality",
+      "section": "aev",
+      "name": "Adding player mortality to AEV Type A events",
+      "desc": "TYPE A يمديه يقتلك",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Player Mortality for AEV Type A",
+      "desc_en": "Type A AEV can kill the player",
+      "notes_en": []
+    },
+    {
+      "id": "ashley_stun_fix",
+      "section": "aev",
+      "name": "Ashley Stun Fix",
+      "desc": "يحل مشكله في Type A",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Ashley Stun Fix",
+      "desc_en": "Fixes a Type A issue",
+      "notes_en": []
+    },
+    {
+      "id": "aev_type_a_params",
+      "section": "aev",
+      "name": "Changing the Parameters of some AEV Type A events",
+      "desc": "يغير بارامترات بعض ايفنتات Type A",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": true,
+      "name_en": "AEV Type A Parameter Changes",
+      "desc_en": "Changes parameters for some Type A events",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ]
+    },
+    {
+      "id": "aev_type_a_damage",
+      "section": "aev",
+      "name": "AEV Type A Damage Type changes from 0A to 08 upon reaching 1 health",
+      "desc": "TYPE A يمديه يخلي هيلك 1",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV Type A - Damage Type 0A to 08 at 1 HP",
+      "desc_en": "Type A can set player HP to 1",
+      "notes_en": []
+    },
+    {
+      "id": "aev_merchant",
+      "section": "aev",
+      "name": "AEV Merchant",
+      "desc": "تشغل AEV داخل متجر التاجر",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "AEV Merchant",
+      "desc_en": "Run AEV inside the merchant shop",
+      "notes_en": []
+    },
+    {
+      "id": "fse_ets",
+      "section": "dll_raz0r",
+      "name": "FSE-ETS",
+      "desc": "تربط FSE ب ETS - Offset[128..131] use ETS id HERE",
+      "notes": [],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true,
+      "name_en": "FSE-ETS",
+      "desc_en": "Links FSE with ETS - Offset[128..131] use ETS id",
+      "notes_en": []
+    },
+    {
+      "id": "bodies_disappear",
+      "section": "gameplay",
+      "name": "Bodies of enemies disappear",
+      "desc": "جثث الاعداء تختفي",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Bodies of Enemies Disappear",
+      "desc_en": "Enemy bodies disappear",
+      "notes_en": [],
+      "mutex": "bodies_no_disappear"
+    },
+    {
+      "id": "bodies_no_disappear",
+      "section": "gameplay",
+      "name": "Bodies of enemies that do not disappear",
+      "desc": "جثث الاعداء لا تختفي",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Bodies of Enemies Do Not Disappear",
+      "desc_en": "Enemy bodies stay",
+      "notes_en": [],
+      "mutex": "bodies_disappear"
+    },
+    {
+      "id": "fix_striker",
+      "section": "gameplay",
+      "name": "Fix Striker bug",
+      "desc": "يصلح قلتش السترايكر",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Fix Striker Bug",
+      "desc_en": "Fixes the Striker glitch",
+      "notes_en": []
+    },
+    {
+      "id": "loot_no_disappear",
+      "section": "gameplay",
+      "name": "Loot never Disappear",
+      "desc": "اللوت ما يختفي",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Loot Never Disappears",
+      "desc_en": "Loot stays on ground",
+      "notes_en": []
+    },
+    {
+      "id": "items_outside_case",
+      "section": "gameplay",
+      "name": "Items outside the Case",
+      "desc": "ايتمات خارج الشنطه",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Items Outside the Case",
+      "desc_en": "Items appear outside the inventory",
+      "notes_en": []
+    },
+    {
+      "id": "drop_more_ammo",
+      "section": "gameplay",
+      "name": "Drop Less Money and Drop More Ammo",
+      "desc": "يطيح رصاص اكثر وفلوس اقل",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Drop Less Money and Drop More Ammo",
+      "desc_en": "Drop more ammo, less money",
+      "notes_en": []
+    },
+    {
+      "id": "remove_random_drops",
+      "section": "gameplay",
+      "name": "Remove Random Drops",
+      "desc": "يعطل الايتمات العشوائيه",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Remove Random Drops",
+      "desc_en": "Disables random item drops",
+      "notes_en": []
+    },
+    {
+      "id": "remove_luis",
+      "section": "gameplay",
+      "name": "Remove Luis from cabin",
+      "desc": "يحذف لويس من الكوخ",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Remove Luis from Cabin",
+      "desc_en": "Removes Luis from the cabin",
+      "notes_en": []
+    },
+    {
+      "id": "drop_items_100",
+      "section": "gameplay",
+      "name": "Drop Items 100%",
+      "desc": "يطيح 100% ايتمات",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Drop Items 100%",
+      "desc_en": "100% item drop rate",
+      "notes_en": []
+    },
+    {
+      "id": "remove_corpse_effect",
+      "section": "gameplay",
+      "name": "Remove Enemies Corpse Dying Effect",
+      "desc": "يشيل افكت لما الاعداء يموتو",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Remove Enemy Corpse Dying Effect",
+      "desc_en": "Removes death effect from enemies",
+      "notes_en": []
+    },
+    {
+      "id": "remove_saw_smoke",
+      "section": "gameplay",
+      "name": "Remove Chainsaw Smoke Effects",
+      "desc": "يشيل افكت الدخان من المناشير",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Remove Chainsaw Smoke Effects",
+      "desc_en": "Removes smoke effect from chainsaws",
+      "notes_en": []
+    },
+    {
+      "id": "remove_tnt",
+      "section": "gameplay",
+      "name": "Remove TNT effect",
+      "desc": "يشيل افكت ال TNT",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Remove TNT Effect",
+      "desc_en": "Removes TNT effect",
+      "notes_en": []
+    },
+    {
+      "id": "no_melee_ganados",
+      "section": "gameplay",
+      "name": "No Melee for Ganados",
+      "desc": "مافي كيك للاعداء",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "No Melee for Ganados",
+      "desc_en": "Enemies have no kick",
+      "notes_en": []
+    },
+    {
+      "id": "saw_killable",
+      "section": "enemy",
+      "name": "Killing a saw without cheating",
+      "desc": "تموت من المنشار بدون تويكس",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Killing a Saw Without Cheating",
+      "desc_en": "Die from chainsaw without tweaks",
+      "notes_en": []
+    },
+    {
+      "id": "u3_esl",
+      "section": "enemy",
+      "name": "U3 Health linked to ESL",
+      "desc": "U3 ينربط الهيل حقه ب ESL",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "U3 Health Linked to ESL",
+      "desc_en": "U3 health linked to ESL",
+      "notes_en": []
+    },
+    {
+      "id": "regen_esl",
+      "section": "enemy",
+      "name": "Regenerator Health linked to ESL",
+      "desc": "Regenerator ينربط الهيل حقه ب ESL",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Regenerator Health Linked to ESL",
+      "desc_en": "Regenerator health linked to ESL",
+      "notes_en": []
+    },
+    {
+      "id": "saddler_death",
+      "section": "enemy",
+      "name": "Let Saddler have a death animation, and we can open the inventory",
+      "desc": "يمديك تخلي سادلر يموت",
+      "notes": [
+        "[!] الملف المعدل في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Saddler Death Animation + Open Inventory",
+      "desc_en": "Allows Saddler to have a death animation",
+      "notes_en": [
+        "[!] Check the Modified files folder: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ]
+    },
+    {
+      "id": "no_verdugo_freeze",
+      "section": "enemy",
+      "name": "Delete Verdugo Freeze",
+      "desc": "ما يمديك تجمد فيردوقو",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Delete Verdugo Freeze",
+      "desc_en": "Cannot freeze Verdugo",
+      "notes_en": []
+    },
+    {
+      "id": "merchant_init",
+      "section": "enemy",
+      "name": "Merchant Initialization (r100)",
+      "desc": "يحل مشكله التاجر انه يبيع بس شنطه xxxxxl",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Merchant Initialization (r100)",
+      "desc_en": "Fixes merchant selling only xxxxxl bags",
+      "notes_en": []
+    },
+    {
+      "id": "em_incompat_fix",
+      "section": "enemy",
+      "name": "EM Incompatibility Issue Fix",
+      "desc": "يحل مشاكل توافق الاعداء",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "EM Incompatibility Issue Fix",
+      "desc_en": "Fixes enemy compatibility issues",
+      "notes_en": []
+    },
+    {
+      "id": "r101_bell_cancel",
+      "section": "room",
+      "name": "R101 Bell Cancellation",
+      "desc": "يشيل الجرس",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "R101 Bell Cancellation",
+      "desc_en": "Removes the bell",
+      "notes_en": []
+    },
+    {
+      "id": "fix_r100_crash",
+      "section": "room",
+      "name": "Fix Crash if you kill many enemies before cutscene in r100",
+      "desc": "يصلح الكراش في r100 اذا قتلت كثير اعداء قبل الكاتسين",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Fix Crash - r100 Many Enemies Before Cutscene",
+      "desc_en": "Fixes crash from killing too many enemies before cutscene in r100",
+      "notes_en": []
+    },
+    {
+      "id": "fix_r101_disappear",
+      "section": "room",
+      "name": "Fix Enemies disappearing in Village r101 After Bell",
+      "desc": "يصلح مشكله اختفاء الاعداء بعد الجرس في r101",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Fix Enemies Disappearing in Village r101 After Bell",
+      "desc_en": "Fixes enemies disappearing after bell in r101",
+      "notes_en": []
+    },
+    {
+      "id": "fix_r202_disappear",
+      "section": "room",
+      "name": "Fix Enemies disappearing in Cannon r202 After Cannon",
+      "desc": "يصلح مشكله اختفاء الاعداء بعد المدفع في r202",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Fix Enemies Disappearing in Cannon r202",
+      "desc_en": "Fixes enemies disappearing after cannon in r202",
+      "notes_en": []
+    },
+    {
+      "id": "disable_fish_r10b",
+      "section": "room",
+      "name": "Disable Fish from r10b",
+      "desc": "يشيل اسماك من r10b",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Disable Fish from r10b",
+      "desc_en": "Removes fish from r10b",
+      "notes_en": []
+    },
+    {
+      "id": "grey_screen_fix",
+      "section": "general_fixes",
+      "name": "Grey Screen Fix",
+      "desc": "يصلح مشكله الشاشه الرماديه",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Grey Screen Fix",
+      "desc_en": "Fixes the grey screen issue",
+      "notes_en": []
+    },
+    {
+      "id": "treasure_sound_fix",
+      "section": "general_fixes",
+      "name": "Treasure Box Sound Fix",
+      "desc": "يصلح مشكله صوت الفلوس لما تاخذها",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Treasure Box Sound Fix",
+      "desc_en": "Fixes sound when collecting money",
+      "notes_en": []
+    },
+    {
+      "id": "eff_mem_x3",
+      "section": "memory",
+      "name": "EFF MEM X3",
+      "desc": "ميموري الافكتات يتبدل 3 مرات",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "EFF MEM X3",
+      "desc_en": "Effect memory cycles 3 times",
+      "notes_en": []
+    },
+    {
+      "id": "disable_spiders_bats",
+      "section": "misc",
+      "name": "Disable Spiders and Bats from maps",
+      "desc": "يشيل كل الخفافيش والعناكب",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Disable Spiders and Bats",
+      "desc_en": "Removes all spiders and bats from maps",
+      "notes_en": []
+    },
+    {
+      "id": "ashley_no_scare",
+      "section": "misc",
+      "name": "Ashley No Scare",
+      "desc": "اشلي ما تصرخ",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Ashley No Scare",
+      "desc_en": "Ashley does not scream",
+      "notes_en": []
+    },
+    {
+      "id": "ashley_upskirt_remove",
+      "section": "misc",
+      "name": "Ashley UpSkirt Reaction Removal",
+      "desc": "اشلي ما تعطي رده فعل",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Ashley UpSkirt Reaction Removal",
+      "desc_en": "Ashley has no reaction",
+      "notes_en": []
+    },
+    {
+      "id": "em18_invincible",
+      "section": "misc",
+      "name": "EM18 Invincible to Incendiary Grenades",
+      "desc": "التاجر ما يموت من قنبله نار",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "EM18 Invincible to Incendiary Grenades",
+      "desc_en": "Merchant cannot die from fire grenades",
+      "notes_en": []
+    },
+    {
+      "id": "night_eyes_always",
+      "section": "misc",
+      "name": "Night Time Eyes Always On",
+      "desc": "عيون الليل شغاله طول الوقت",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Night Time Eyes Always On",
+      "desc_en": "Night eyes always active",
+      "notes_en": []
+    },
+    {
+      "id": "no_leon_inventory",
+      "section": "misc",
+      "name": "No Leon Model In Inventory",
+      "desc": "مافي ليون في الشنطه",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "No Leon Model In Inventory",
+      "desc_en": "No Leon in inventory",
+      "notes_en": []
+    },
+    {
+      "id": "additional_bgm",
+      "section": "misc",
+      "name": "Adding Additional BGM files",
+      "desc": "يضيف ملف XSB و XWB جديده",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\"",
+        "[!] يمكنك اختيار اسم الملف براحتك"
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": true,
+      "dialog": "bgm_files",
+      "name_en": "Adding Additional BGM Files",
+      "desc_en": "Adds new XSB and XWB files",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT",
+        "[!] You can choose any file name you want"
+      ]
+    },
+    {
+      "id": "start_r120",
+      "section": "misc",
+      "name": "Start game on r120",
+      "desc": "تبدأ اللعبه في r120",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Start Game on r120",
+      "desc_en": "Game starts at r120",
+      "notes_en": []
+    },
+    {
+      "id": "em_xwb_xsb",
+      "section": "misc",
+      "name": "New XWB XSB per enemy (em19 etc)",
+      "desc": "كل عدو له XWB و XSB خاص",
+      "notes": [
+        "[!] الملف المعدل في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [],
+      "detectable": true,
+      "name_en": "New XWB/XSB Per Enemy (em19 etc)",
+      "desc_en": "Each enemy has its own XWB and XSB",
+      "notes_en": [
+        "[!] Check the Modified files folder: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ]
+    },
+    {
+      "id": "hp_display",
+      "section": "misc",
+      "name": "HP Display without HID",
+      "desc": "يبين الهيل بدون dll او ترينر",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "HP Display Without HID",
+      "desc_en": "Shows HP without dll or trainer",
+      "notes_en": []
+    },
+    {
+      "id": "matilda_quickturn",
+      "section": "gameplay",
+      "name": "Matilda Quickturn",
+      "desc": "سلاح \"Matilda\" يصير سرعه اللف اسرع",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Matilda Quickturn",
+      "desc_en": "Matilda weapon turn speed is faster",
+      "notes_en": []
+    },
+    {
+      "id": "u3_form1_kill",
+      "section": "enemy",
+      "name": "Let U3 Appear in primary form that we can kill him",
+      "desc": "يمديك تقتل U3 بالتحول الأول",
+      "notes": [
+        "[!] الملف المعدل في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [],
+      "detectable": true,
+      "name_en": "U3 - Killable in Primary Form",
+      "desc_en": "Kill U3 in first transformation",
+      "notes_en": [
+        "[!] Check the Modified files folder: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ]
+    },
+    {
+      "id": "u3_form2_kill",
+      "section": "enemy",
+      "name": "Let U3 Appear in second form that we can kill him",
+      "desc": "يمديك تقتل U3 التحول الثاني",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "U3 - Killable in Second Form",
+      "desc_en": "Kill U3 in second transformation",
+      "notes_en": []
+    },
+    {
+      "id": "u3_die_in_place",
+      "section": "enemy",
+      "name": "Let U3 die in place rather than outside",
+      "desc": "يموت U3 بمكانه بدال خارج الماب",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "U3 Dies in Place",
+      "desc_en": "U3 dies on the map instead of outside",
+      "notes_en": []
+    },
+    {
+      "id": "saddler_death_v2",
+      "section": "enemy",
+      "name": "Saddler enter in Death Count and will not resurrect after die",
+      "desc": "سادلر يبقى ميت بعد ما يموت",
+      "notes": [],
+      "requires": [],
+      "detectable": true,
+      "name_en": "Saddler Death Count - No Resurrection",
+      "desc_en": "Saddler stays dead after dying",
+      "notes_en": []
+    },
+    {
+      "id": "show_room_id",
+      "section": "misc",
+      "name": "Show Room ID at Save & Load Screen",
+      "desc": "يظهر رقم الغرفه كل ما تمر عند شاشة التخزين",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\"",
+        "[!] الملف المعدل في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": true,
+      "name_en": "Show Room ID at Save & Load Screen",
+      "desc_en": "Shows room number at save/load screen",
+      "notes_en": [
+        "[!] Requires: POINTER EDIT",
+        "[!] Check the Modified files folder: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ]
+    },
+    {
+      "id": "fix_slow_motion",
+      "section": "misc",
+      "name": "FIX SLOW MOTION",
+      "desc": "يشيل السلو موشن",
+      "notes": [
+        "[!] هاذا الكود فقط يضبط على محاكي WINLATOR"
+      ],
+      "notes_en": [
+        "[!] This code only works on WINLATOR emulator"
+      ],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Removes slow motion",
+      "name_en": "FIX SLOW MOTION"
+    },
+    {
+      "id": "companion_to_qingsheng",
+      "section": "misc",
+      "name": "Make almost every edit for Companion DLL work with Qingsheng DLL",
+      "desc": "اغلب اكواد dll raz0r تصير تشتغل في Qingsheng DLL",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Makes almost every Companion DLL edit work with Qingsheng DLL",
+      "name_en": "Make almost every edit for Companion DLL work with Qingsheng DLL"
+    },
+    {
+      "id": "add_udas_st1",
+      "section": "misc",
+      "name": "Add UDAS for ST1",
+      "desc": "يضيف مابات اكثر في ST1",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Adds more maps in ST1",
+      "name_en": "Add UDAS for ST1"
+    },
+    {
+      "id": "no_1998_cutscene",
+      "section": "misc",
+      "name": "No 1998 Cutscene",
+      "desc": "مافي كاتسين البدايه حق 1998",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Removes the 1998 intro cutscene",
+      "name_en": "No 1998 Cutscene"
+    },
+    {
+      "id": "wesker_hunk_knife",
+      "section": "misc",
+      "name": "Wesker & Hunk Can Use Knife",
+      "desc": "هانك وويسكر يستخدمون سكين",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Wesker and Hunk can use the knife",
+      "name_en": "Wesker & Hunk Can Use Knife"
+    },
+    {
+      "id": "leon_ashley_photo",
+      "section": "misc",
+      "name": "Leon and Ashley Photo at Beginning",
+      "desc": "صوره ليون واشلي البدايه",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Leon and Ashley photo at the beginning",
+      "name_en": "Leon and Ashley Photo at Beginning"
+    },
+    {
+      "id": "hookshot_leon",
+      "section": "gameplay",
+      "name": "Hookshot for Leon",
+      "desc": "ليون يمديه يسوي خطاف ايدا",
+      "notes": [
+        "[!] الملف المعدل في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "notes_en": [
+        "[!] Check the Modified files folder: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Leon can use Ada's hookshot",
+      "name_en": "Hookshot for Leon"
+    },
+    {
+      "id": "survive_chainsaw",
+      "section": "gameplay",
+      "name": "Survive Chainsaw Attack",
+      "desc": "تعيش من هجمه المنشار",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Survive the chainsaw attack",
+      "name_en": "Survive Chainsaw Attack"
+    },
+    {
+      "id": "verdugo_no_teleport",
+      "section": "gameplay",
+      "name": "Verdugo No Teleport",
+      "desc": "فيردوقو ما يختفي",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Verdugo does not teleport",
+      "name_en": "Verdugo No Teleport"
+    },
+    {
+      "id": "verdugo_no_teleport_raz0r",
+      "section": "dll_raz0r",
+      "name": "Verdugo No Teleport (raz0r version)",
+      "desc": "فيردوقو ما يختفي - نسخة raz0r",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ],
+      "requires": [
+        "apply_dll_raz0r",
+        "pointer_edit"
+      ],
+      "detectable": true,
+      "desc_en": "Verdugo does not teleport (raz0r version)",
+      "name_en": "Verdugo No Teleport (raz0r version)"
+    },
+    {
+      "id": "enemy_ai_aggressive",
+      "section": "enemy",
+      "name": "Enemy AI More Aggressive",
+      "desc": "الاعداء يصير الذكاء الاصطناعي حقهم اشرس",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "desc_en": "Enemy AI becomes more aggressive",
+      "name_en": "Enemy AI More Aggressive"
+    },
+    {
+      "id": "link_tweaks_exe",
+      "section": "misc",
+      "name": "Link Tweaks with EXE",
+      "name_en": "Link Tweaks with EXE",
+      "desc": "يربط الـ EXE مع التويكس",
+      "desc_en": "Links the EXE with the tweaks",
+      "notes": [
+        "[!] لازم تكون حاط إصدار 1.9.1 حق التويك",
+        "[!] الكلمة لازم تكون 5 أحرف فقط"
+      ],
+      "notes_en": [
+        "[!] Requires tweak version 1.9.1",
+        "[!] The keyword must be exactly 5 characters"
+      ],
+      "requires": [],
+      "detectable": true,
+      "dialog": "link_tweaks"
+    },
+    {
+      "id": "itm_type6_cam",
+      "section": "misc",
+      "name": "ITM Shown in Type 6 Camera Shots",
+      "name_en": "ITM Shown in Type 6 Camera Shots",
+      "desc": "الايتمات تظهر حتى في الكميرا",
+      "desc_en": "Items are visible during Type 6 camera shots",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "no_escape_auto_cam",
+      "section": "misc",
+      "name": "No Escape Auto Cam (Type 2 events)",
+      "name_en": "No Escape Auto Cam (Type 2 events)",
+      "desc": "ما يمديك تسكب للكميرا",
+      "desc_en": "Cannot escape to camera in Type 2 events",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": true
+    },
+    {
+      "id": "effects_keep_during_cam",
+      "section": "misc",
+      "name": "Effects Keep Playing During Cam",
+      "name_en": "Effects Keep Playing During Cam",
+      "desc": "الافكتات تظهر حتى في الكام",
+      "desc_en": "Effects continue playing during camera events",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "keep_type6_lights_cam",
+      "section": "misc",
+      "name": "Keep Type 6 Lights During Cam Events",
+      "name_en": "Keep Type 6 Lights During Cam Events",
+      "desc": "الأضواء تبقى شغالة خلال الكام",
+      "desc_en": "Type 6 lights stay on during camera events",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "keep_ears_after_death",
+      "section": "misc",
+      "name": "Keep EARs Visible After Death",
+      "name_en": "Keep EARs Visible After Death",
+      "desc": "EAR يبقى موجود حتى بعد الموت",
+      "desc_en": "EAR objects remain visible after death",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "disable_merc_timer",
+      "section": "misc",
+      "name": "Disable Mercenaries Map Timer",
+      "name_en": "Disable Mercenaries Map Timer",
+      "desc": "يشيل الوقت حق المرتزقة",
+      "desc_en": "Removes the timer in Mercenaries mode",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "grenade_kill_count",
+      "section": "misc",
+      "name": "How Many Enemies Grenade Explode at Time",
+      "name_en": "How Many Enemies Grenade Can Kill at Once",
+      "desc": "كم يمديك تقتل عدو بقنبلة وحدة",
+      "desc_en": "Number of enemies one grenade can kill",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "crash_retry_fix",
+      "section": "misc",
+      "name": "Crash on Retry Fix",
+      "name_en": "Crash on Retry Fix",
+      "desc": "إصلاح كراش عند الريتراي",
+      "desc_en": "Fixes crash when retrying",
+      "notes": [
+        "[!] نصيحة: لا تحطه إلا إذا واجهت المشكلة"
+      ],
+      "notes_en": [
+        "[!] Only use if you experience this crash"
+      ],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "em_climb_aev_ladders",
+      "section": "aev",
+      "name": "Allow EMs to Climb AEV Ladders",
+      "name_en": "Allow EMs to Climb AEV Ladders",
+      "desc": "الأعداء يمديهم يتسلقون",
+      "desc_en": "Enemies can climb AEV ladders",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "ashley_buttons_r20ef",
+      "section": "gameplay",
+      "name": "Use Ashley Buttons in r20e and r20d",
+      "name_en": "Use Ashley Buttons in r20e and r20d",
+      "desc": "يمديك تستعمل أزرار حق أشلي",
+      "desc_en": "Allows using Ashley buttons in r20e and r20f",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "em_correct_id_location",
+      "section": "enemy",
+      "name": "Make Some Enemies Read ID from Correct Location",
+      "name_en": "Make Some Enemies Read ID from Correct Location",
+      "desc": "يصلح قراءة الـ ID عند بعض الأعداء",
+      "desc_en": "Fixes ID reading for some enemies",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "parasite_plaga_ita_fix",
+      "section": "ita",
+      "name": "Parasite Plaga ITA Respawn Fix",
+      "name_en": "Parasite Plaga ITA Respawn Fix",
+      "desc": "إصلاح مشكلة البلاغا ما تظهر في العدو",
+      "desc_en": "Fixes parasite plaga not appearing on enemies",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "companion_no_double_alloc",
+      "section": "dll_raz0r",
+      "name": "Companion DLL No 2x Allocation",
+      "name_en": "Companion DLL No 2x Allocation",
+      "desc": "إصلاح مشكلة التخصيص المزدوج في DLL",
+      "desc_en": "Fixes double allocation issue in Companion DLL",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ],
+      "requires": [
+        "apply_dll_raz0r",
+        "pointer_edit"
+      ],
+      "detectable": true
+    },
+    {
+      "id": "max_draw_distance",
+      "section": "memory",
+      "name": "Maximum Draw Distance",
+      "name_en": "Maximum Draw Distance",
+      "desc": "يزيد مسافة رؤية الافكتات للحد الأقصى",
+      "desc_en": "Maximizes the draw distance of Effects",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "ese_paused_dll_movie",
+      "section": "dll_raz0r",
+      "name": "ESEs Paused Instead of Removed on Companion DLL Movie",
+      "name_en": "ESEs Paused Instead of Removed on Companion DLL Movie",
+      "desc": "يوقف ESE بدال ما يحذفه خلال الكاتسين",
+      "desc_en": "ESEs are paused instead of removed during Companion DLL movies",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ],
+      "requires": [
+        "apply_dll_raz0r",
+        "pointer_edit"
+      ],
+      "detectable": true
+    },
+    {
+      "id": "control_cam_visibility",
+      "section": "misc",
+      "name": "Control Camera Visibility / Freezes",
+      "name_en": "Control Camera Visibility / Freezes",
+      "desc": "تتحكم في ظهور الكميرا وتجميدها",
+      "desc_en": "Controls camera visibility and freeze behavior",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "disable_shadow_lightning",
+      "section": "misc",
+      "name": "Disable Shadow Lightning",
+      "name_en": "Disable Shadow Lightning",
+      "desc": "يشيل إضاءة الظل",
+      "desc_en": "Removes shadow lightning effects",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "close_inventory_esc",
+      "section": "misc",
+      "name": "Close Inventory Menu with ESC",
+      "name_en": "Close Inventory Menu with ESC",
+      "desc": "تقدر تسكر قائمة الأسلحة بزر ESC",
+      "desc_en": "Allows closing the inventory menu with ESC key",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "fake_weapons_swaping",
+      "section": "misc",
+      "name": "Fake Weapons Swaping",
+      "name_en": "Fake Weapons Swaping",
+      "desc": "تبديل وهمي للأسلحة",
+      "desc_en": "Enables fake weapon swapping",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "leon_always_kick_doors",
+      "section": "gameplay",
+      "name": "Leon Always Kick Doors",
+      "name_en": "Leon Always Kick Doors",
+      "desc": "ليون دايماً يكسر الأبواب بركلة",
+      "desc_en": "Leon always kicks doors open",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "always_xl_case",
+      "section": "misc",
+      "name": "Always XL Attache Case",
+      "name_en": "Always XL Attache Case",
+      "desc": "الحقيبة تكون XL دايماً حتى لو غيرتها",
+      "desc_en": "Forces the attache case to always be XL size",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "infinite_parasite_lifetime",
+      "section": "misc",
+      "name": "Infinite Parasite Lifetime",
+      "name_en": "Infinite Parasite Lifetime",
+      "desc": "البلاغا ما تموت بالوقت وتبقى موجودة",
+      "desc_en": "Disables the parasite death timer so it stays forever",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "transparency_pickup_fix",
+      "section": "misc",
+      "name": "Transparency Pick Up Item Fix",
+      "name_en": "Transparency Pick Up Item Fix",
+      "desc": "يصلح مشكلة الشفافية عند التقاط الأشياء",
+      "desc_en": "Fixes transparency overlay bug when picking up items",
+      "notes": [
+        "[!] التويكس يصلح هذه المشكلة تلقائياً"
+      ],
+      "notes_en": [
+        "[!] RE4 Tweaks DLL already fixes this automatically"
+      ],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "ashley_elevator",
+      "section": "misc",
+      "name": "Ashley Visible on Elevator (r225, r21d)",
+      "name_en": "Ashley Visible on Elevator (r225, r21d)",
+      "desc": "أشلي تظهر معاك في المصعد في r225 و r21d",
+      "desc_en": "Ashley is drawn alongside Leon when riding the elevator in r225 and r21d",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": true
+    },
+    {
+      "id": "human_salazar_killable",
+      "section": "enemy",
+      "name": "Human Salazar Can Be Killed",
+      "name_en": "Human Salazar Can Be Killed",
+      "desc": "يمديك تقتل سالازار بشكله الآدمي",
+      "desc_en": "Allows killing human form Salazar",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "assist_aiming",
+      "section": "gameplay",
+      "name": "Assist Aiming",
+      "name_en": "Assist Aiming",
+      "desc": "يفعل المساعدة في التصويب — يؤثر على المسدسات والـ TMP",
+      "desc_en": "Enables aim assist — affects pistols and TMP weapons",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "healing_stack_fix",
+      "section": "misc",
+      "name": "Healing Stack Fix",
+      "name_en": "Healing Stack Fix",
+      "desc": "الأدوية تتكدس في الحقيبة ومزج الأعشاب يروح للحقيبة مباشرة",
+      "desc_en": "Makes healing items stack in the case and herb mixes go directly into the attache case",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "disable_char_shine",
+      "section": "misc",
+      "name": "Disable Character Shine Light",
+      "name_en": "Disable Character Shine Light",
+      "desc": "يشيل الضوء اللي يشع من الشخصية",
+      "desc_en": "Removes the shine light effect on the character model",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "st0_emleon08",
+      "section": "room",
+      "name": "ST0 Uses emleon08",
+      "name_en": "ST0 Uses emleon08",
+      "desc": "يخلي ST0 يستخدم emleon08 — يحتاج RSERT ORDER",
+      "desc_en": "Makes ST0 use emleon08 — requires RSERT ORDER code",
+      "notes": [
+        "[!] يتطلب كود RSERT ORDER"
+      ],
+      "notes_en": [
+        "[!] Requires: RSERT ORDER code"
+      ],
+      "requires": [
+        "rsert_order"
+      ],
+      "detectable": true
+    },
+    {
+      "id": "xwb_limit_fix",
+      "section": "misc",
+      "name": "XWB Limit Fix",
+      "name_en": "XWB Limit Fix",
+      "desc": "يزيد حد ملفات XWB اللي تقدر تحملها اللعبة",
+      "desc_en": "Increases the limit of XWB files the game can load at once",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "random_ptas",
+      "section": "misc",
+      "name": "Random Ptas Quantity",
+      "name_en": "Random Ptas Quantity",
+      "desc": "تحدد كمية العملات العشوائية اللي تطيح",
+      "desc_en": "Set the amount of randomly dropped Ptas",
+      "notes": [
+        "[!] شغّل أولاً، بعدين حدد الكمية. مثال: 100 = 100 ptas، 80 = 80 ptas"
+      ],
+      "notes_en": [
+        "[!] Turn ON first, then set the amount. Example: 100 = 100 ptas, 80 = 80 ptas"
+      ],
+      "requires": [],
+      "detectable": true,
+      "dialog": "numeric_with_toggle"
+    },
+    {
+      "id": "punisher_pierce",
+      "section": "gameplay",
+      "name": "Punisher Piercing Shot Count",
+      "name_en": "Punisher Piercing Shot Count",
+      "desc": "تحدد كم عدو يمدي الـ Punisher يخترق",
+      "desc_en": "Set how many enemies the Punisher can pierce through",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "punisher_pierce"
+    },
+    {
+      "id": "thermal_scope_color",
+      "section": "gameplay",
+      "name": "Thermal Scope Vision Color",
+      "name_en": "Thermal Scope Vision Color",
+      "desc": "تغير لون رؤية الـ Thermal Scope",
+      "desc_en": "Change the Thermal Scope vision color",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "dialog": "dropdown"
+    },
+    {
+      "id": "luis_cabin",
+      "section": "room",
+      "name": "Luis Cabin Time & Enemy Count",
+      "name_en": "Luis Cabin Time & Enemy Count",
+      "desc": "تعديل وقت وعدد أعداء كبينة لويس",
+      "desc_en": "Customize time limit and enemy kill count for Luis cabin",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "luis_cabin"
+    },
+    {
+      "id": "plaga_health",
+      "section": "gameplay",
+      "name": "Change Plaga Health",
+      "name_en": "Change Plaga Health",
+      "desc": "تحدد صحة البلاغا",
+      "desc_en": "Set the health value for Plaga",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "infrared_scope_color",
+      "section": "gameplay",
+      "name": "Infrared Scope Color",
+      "name_en": "Infrared Scope Color",
+      "desc": "تغير لون رؤية منظار الأشعة تحت الحمراء",
+      "desc_en": "Change the Infrared Scope vision color",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "dialog": "dropdown"
+    },
+    {
+      "id": "drawn_enemies_cam",
+      "section": "misc",
+      "name": "Drawn Enemies During Camera Events",
+      "name_en": "Drawn Enemies During Camera Events",
+      "desc": "تخلي الأعداء يظهرون خلال الكميرا في 4 غرف تختارها",
+      "desc_en": "Makes enemies visible during camera events in up to 4 rooms of your choice",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "drawn_enemies_cam"
+    },
+    {
+      "id": "custom_ces",
+      "section": "room",
+      "name": "Allow Custom Chapter Ending Screens",
+      "name_en": "Allow Custom Chapter Ending Screens",
+      "desc": "تحدد غرف مخصصة لشاشات نهاية الفصل",
+      "desc_en": "Set custom room pairs to trigger Chapter Ending Screens",
+      "notes": [
+        "[!] يتطلب كود \"POINTER EDIT\""
+      ],
+      "notes_en": [
+        "[!] Requires: POINTER EDIT"
+      ],
+      "requires": [
+        "pointer_edit"
+      ],
+      "detectable": false,
+      "dialog": "custom_ces"
+    },
+    {
+      "id": "quick_draw_bow",
+      "section": "gameplay",
+      "name": "Quick Draw Bow",
+      "name_en": "Quick Draw Bow",
+      "desc": "رسم القوس بشكل أسرع",
+      "desc_en": "Faster bow draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_knife",
+      "section": "gameplay",
+      "name": "Quick Draw Knife",
+      "name_en": "Quick Draw Knife",
+      "desc": "رسم السكين بشكل أسرع",
+      "desc_en": "Faster knife draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_minethrower",
+      "section": "gameplay",
+      "name": "Quick Draw Mine Thrower",
+      "name_en": "Quick Draw Mine Thrower",
+      "desc": "رسم الـ Mine Thrower بشكل أسرع",
+      "desc_en": "Faster mine thrower draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_prl42",
+      "section": "gameplay",
+      "name": "Quick Draw PRL 4.2",
+      "name_en": "Quick Draw PRL 4.2",
+      "desc": "رسم الـ PRL 4.2 بشكل أسرع",
+      "desc_en": "Faster PRL 4.2 draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_pistols",
+      "section": "gameplay",
+      "name": "Quick Draw Pistols",
+      "name_en": "Quick Draw Pistols",
+      "desc": "رسم المسدسات بشكل أسرع",
+      "desc_en": "Faster pistol draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_rifles",
+      "section": "gameplay",
+      "name": "Quick Draw Rifles",
+      "name_en": "Quick Draw Rifles",
+      "desc": "رسم البنادق بشكل أسرع",
+      "desc_en": "Faster rifle draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_rocketlaunchers",
+      "section": "gameplay",
+      "name": "Quick Draw Rocket Launchers",
+      "name_en": "Quick Draw Rocket Launchers",
+      "desc": "رسم قاذف الصواريخ بشكل أسرع",
+      "desc_en": "Faster rocket launcher draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_shotguns",
+      "section": "gameplay",
+      "name": "Quick Draw Shotguns",
+      "name_en": "Quick Draw Shotguns",
+      "desc": "رسم الشوت غن بشكل أسرع",
+      "desc_en": "Faster shotgun draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_draw_tmp_typewriter",
+      "section": "gameplay",
+      "name": "Quick Draw TMP / Typewriter",
+      "name_en": "Quick Draw TMP / Typewriter",
+      "desc": "رسم الـ TMP والـ Typewriter بشكل أسرع",
+      "desc_en": "Faster TMP and Typewriter draw speed",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "quick_ashley_catch",
+      "section": "gameplay",
+      "name": "Quick Ashley Catch",
+      "name_en": "Quick Ashley Catch",
+      "desc": "ليون يمسك أشلي بشكل أسرع",
+      "desc_en": "Leon catches Ashley faster",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "rifle_scope_infrared",
+      "section": "gameplay",
+      "name": "Rifle Scope Always Infrared",
+      "name_en": "Rifle Scope Always Infrared",
+      "desc": "منظار البندقية دايماً بوضع الأشعة تحت الحمراء",
+      "desc_en": "Rifle scope is always in infrared mode",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "short_ladder_anim",
+      "section": "gameplay",
+      "name": "Short Ladder Animation",
+      "name_en": "Short Ladder Animation",
+      "desc": "تقصير حركة تسلق السلم",
+      "desc_en": "Shortens the ladder climbing animation",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "disable_buy_sell",
+      "section": "gameplay",
+      "name": "Disable Buy & Sell from Merchant",
+      "name_en": "Disable Buy & Sell from Merchant",
+      "desc": "يوقف الشراء والبيع من التاجر",
+      "desc_en": "Disables buying and selling from the merchant",
+      "notes": [
+        "[!] غير مختبر مع الترقيات"
+      ],
+      "notes_en": [
+        "[!] Untested whether weapon upgrades still work"
+      ],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "punisher_after_15_medals",
+      "section": "gameplay",
+      "name": "Punisher Unlocked After 15 Medallions",
+      "name_en": "Punisher Unlocked After 15 Medallions",
+      "desc": "الـ Punisher يظهر عند التاجر بعد 15 ميدالية",
+      "desc_en": "Punisher appears in merchant after 15 broken medallions",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "no_esc_transition",
+      "section": "misc",
+      "name": "No ESC Transition",
+      "name_en": "No ESC Transition",
+      "desc": "يشيل انتقال الـ ESC",
+      "desc_en": "Removes the ESC transition effect",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "no_opening_cutscenes",
+      "section": "misc",
+      "name": "No Opening Cutscene (Car Scene)",
+      "name_en": "No Opening Cutscene (Car Scene)",
+      "desc": "يشيل مشهد ليون في السيارة عند فتح اللعبة",
+      "desc_en": "Removes the opening car scene with Leon driving down the road",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "separate_items_stack",
+      "section": "misc",
+      "name": "Separate Items From Stack",
+      "name_en": "Separate Items From Stack",
+      "desc": "يفصل الأصناف في التكديس — كل نوع مع نوعه فقط",
+      "desc_en": "Separates item stacking so only similar items stack together",
+      "notes": [
+        "[!] الرمانات وسهام القوس تشترك في نفس قيمة الـ stack"
+      ],
+      "notes_en": [
+        "[!] Grenades and bowgun darts share the same stack value"
+      ],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "memory_alloc",
+      "section": "memory",
+      "name": "Memory Allocation (MEM2)",
+      "name_en": "Memory Allocation (MEM2)",
+      "desc": "تعديل حجم الذاكرة العامة للعبة",
+      "desc_en": "Adjust game general memory allocation",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "memory_alloc"
+    },
+    {
+      "id": "r102_no_teleport",
+      "section": "misc",
+      "name": "r102 - No Teleport After Cutscene",
+      "name_en": "r102 - No Teleport After Cutscene",
+      "desc": "يمنع انتقال اللاعب بعد الكاتسين في r102",
+      "desc_en": "Prevents player teleport after cutscene in r102",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "r102_no_merchant",
+      "section": "misc",
+      "name": "r102 - No Merchant Shop After Cutscene",
+      "name_en": "r102 - No Merchant Shop After Cutscene",
+      "desc": "يمنع فتح متجر التاجر بعد الكاتسين في r102",
+      "desc_en": "Prevents merchant shop from opening after cutscene in r102",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "r320_no_teleport",
+      "section": "misc",
+      "name": "r320 - No Teleport After Cutscene",
+      "name_en": "r320 - No Teleport After Cutscene",
+      "desc": "يمنع انتقال اللاعب بعد الكاتسين الأول في r320",
+      "desc_en": "Prevents player teleport after first cutscene in r320",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "r320_no_explosion",
+      "section": "misc",
+      "name": "r320 - No Explosion Sound",
+      "name_en": "r320 - No Explosion Sound",
+      "desc": "يشيل صوت الانفجار عند دخول r320 لأول مرة",
+      "desc_en": "Removes explosion sound when entering r320 for the first time",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "ashley_water_effect",
+      "section": "misc",
+      "name": "Ashley Water Effect in Any Room",
+      "name_en": "Ashley Water Effect in Any Room",
+      "desc": "يفعل تأثير الماء مع أشلي في أي غرفة",
+      "desc_en": "Enables Ashley's water splash effects in any room, not just r10a and r11a",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "ashley_jumps_alone",
+      "section": "misc",
+      "name": "Ashley Jumps Alone",
+      "name_en": "Ashley Jumps Alone",
+      "desc": "أشلي تقفز لوحدها بدون ما ليون يمسكها",
+      "desc_en": "Ashley can jump alone without Leon needing to catch her",
+      "notes": [
+        "[!] الملف المعدل في: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "notes_en": [
+        "[!] Check the Modified files folder: RE4 MASTER EDITOR/RE4 CODE MANAGER/Modified files/"
+      ],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "luis_persistent_fix",
+      "section": "misc",
+      "name": "Luis Never Responds to Persistent Attacks Outside r11c",
+      "name_en": "Luis Never Responds to Persistent Attacks Outside r11c",
+      "desc": "يمنع لويس من التوقف عن الاستجابة خارج الكبينة",
+      "desc_en": "Prevents Luis from becoming unresponsive after 5 hits outside the cabin",
+      "notes": [
+        "[!] يتطلب كود \"APPLY DLL RAZ0R\""
+      ],
+      "notes_en": [
+        "[!] Requires: APPLY DLL RAZ0R"
+      ],
+      "requires": [
+        "apply_dll_raz0r"
+      ],
+      "detectable": true
+    },
+    {
+      "id": "patch_4gb",
+      "section": "necessary",
+      "name": "4GB Patch",
+      "name_en": "4GB Patch",
+      "desc": "إصلاح مشكلة 4GB للعبة",
+      "desc_en": "Fixes the 4GB memory issue for the game",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "freeze_main_menu",
+      "section": "misc",
+      "name": "Freeze Main Menu",
+      "name_en": "Freeze Main Menu",
+      "desc": "يوقف القائمة الرئيسية",
+      "desc_en": "Freezes the main menu",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "fix_explosives",
+      "section": "general_fixes",
+      "name": "Fixing the Explosives Problem",
+      "name_en": "Fixing the Explosives Problem",
+      "desc": "يصلح مشكلة المتفجرات التي تكون قيمتها 0",
+      "desc_en": "Fix the problem that some explosives are 0",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "plaga_spawn_pct",
+      "section": "gameplay",
+      "name": "Plaga Spawn Percentage",
+      "name_en": "Plaga Spawn Percentage",
+      "desc": "نسبة ظهور البلاغا من الجانادو (05 = 50%، 0A = 100%)",
+      "desc_en": "Percentage chance of Plaga spawning from a Ganado (05 = 50%, 0A = 100%)",
+      "notes": [
+        "[!] اكتب النسبة المئوية. مثال: 50 = 50%، 100 = 100%"
+      ],
+      "notes_en": [
+        "[!] Enter percentage directly. Example: 50 = 50%, 100 = 100%"
+      ],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "change_kick",
+      "section": "gameplay",
+      "name": "تغيير الكيك",
+      "name_en": "Change Kick",
+      "desc": "يغير الكيك الخاص بليون",
+      "desc_en": "Changes Leon's kick animation",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true,
+      "dialog": "dropdown"
+    },
+    {
+      "id": "remove_leon_normal",
+      "section": "misc",
+      "name": "حذف Normal من New Game",
+      "name_en": "Remove Leon [Normal] From New Game",
+      "desc": "يشيل خيار Normal من قائمة New Game",
+      "desc_en": "Removes the Normal difficulty option from the New Game menu",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "ada_merchant_upgrades",
+      "section": "misc",
+      "name": "تطوير السلاح في طور ايدا",
+      "name_en": "Ada Merchant Upgrades",
+      "desc": "يخلي يمديك تطور سلاحك عند التاجر في طور ايدا",
+      "desc_en": "Allows weapon upgrades from the merchant in Ada's scenario",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
+      "id": "medallion_count",
+      "section": "gameplay",
+      "name": "عدد الميداليات لفتح السلاح",
+      "name_en": "Medallion Count to Unlock Weapon",
+      "desc": "يغير كم تحتاج تكسر ميدالية عشان تاخذ السلاح المجاني",
+      "desc_en": "Sets how many medallions must be broken to receive the free weapon",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_mixed_herbs",
+      "section": "gameplay",
+      "name": "مقدار هيل Mixed Herbs",
+      "name_en": "Heal Amount - Mixed Herbs",
+      "desc": "يغير كم يهيل Mixed Herbs",
+      "desc_en": "Sets the healing value for Mixed Herbs",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_white_egg",
+      "section": "gameplay",
+      "name": "مقدار هيل White Egg",
+      "name_en": "Heal Amount - White Egg",
+      "desc": "يغير كم يهيل White Egg",
+      "desc_en": "Sets the healing value for White Egg",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_brown_egg",
+      "section": "gameplay",
+      "name": "مقدار هيل Brown Egg",
+      "name_en": "Heal Amount - Brown Egg",
+      "desc": "يغير كم يهيل Brown Egg",
+      "desc_en": "Sets the healing value for Brown Egg",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_golden_egg",
+      "section": "gameplay",
+      "name": "مقدار هيل Golden Egg",
+      "name_en": "Heal Amount - Golden Egg + Green Herb x3 + Black Bass L",
+      "desc": "يغير كم يهيل Golden Egg مع Green Herb x3 و Black Bass L",
+      "desc_en": "Sets the healing value for Golden Egg combined with Green Herb x3 and Black Bass L",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_firstaid_herbs",
+      "section": "gameplay",
+      "name": "مقدار هيل FirstAid + Green + Red Herbs",
+      "name_en": "Heal Amount - FirstAid + Green + Red Herbs",
+      "desc": "يغير كم يهيل FirstAid مع Green و Red Herbs",
+      "desc_en": "Sets the healing value for FirstAid Spray combined with Green and Red Herbs",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_bass_s",
+      "section": "gameplay",
+      "name": "مقدار هيل Black Bass S",
+      "name_en": "Heal Amount - Black Bass S",
+      "desc": "يغير كم يهيل Black Bass S",
+      "desc_en": "Sets the healing value for Black Bass S",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_green_herb",
+      "section": "gameplay",
+      "name": "مقدار هيل Green Herb",
+      "name_en": "Heal Amount - Green Herb",
+      "desc": "يغير كم يهيل Green Herb",
+      "desc_en": "Sets the healing value for Green Herb",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "heal_green_herb_x2",
+      "section": "gameplay",
+      "name": "مقدار هيل Green Herb x2",
+      "name_en": "Heal Amount - Green Herb x2",
+      "desc": "يغير كم يهيل Green Herb x2",
+      "desc_en": "Sets the healing value for two Green Herbs combined",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": false,
+      "dialog": "numeric_input"
+    },
+    {
+      "id": "fix_aev_enemies_crash",
+      "section": "general_fixes",
+      "name": "إصلاح كراش AEV عند كثرة الأعداء",
+      "name_en": "Fix AEV Crash with Too Many Enemies",
+      "desc": "يصلح مشكلة كراش AEV اذا الأعداء كثيرين جداً",
+      "desc_en": "Fixes a crash that occurs in AEV when there are too many enemies in the scene",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    }
+  ]
+}
