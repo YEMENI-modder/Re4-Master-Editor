@@ -9,7 +9,7 @@
 [![Built With Python](https://img.shields.io/badge/Built%20With-Python-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
 [![Source Code](https://img.shields.io/badge/Source_Code-Claude_AI-purple?style=flat-square)](https://www.anthropic.com/claude)
 ![Visitors](https://visitor-badge.laobi.icu/badge?page_id=YEMENI-modder/RE4-Master-Editor)
-[![Github All Releases](https://img.shields.io/github/downloads/YEMENI-MODDER/Re4-Master-Editor/total.svg)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases)
+[![Github All Releases](https://img.shields.io/github/downloads/YEMENI-modder/Re4-Master-Editor/total.svg)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases)
 
 
 ## التعريف
