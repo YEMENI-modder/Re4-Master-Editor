@@ -1,0 +1,14 @@
+name: Run All Checks
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test_script:
+    uses: ./.github/workflows/Test Script to python.yml
+
+  analyze_script:
+    uses: ./.github/workflows/analyze_script.yml
+
+  python_package:
+    uses: ./.github/workflows/python-package.yml
