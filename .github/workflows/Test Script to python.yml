@@ -1,0 +1,43 @@
+name: Test RE4 Master Editor
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install customtkinter
+
+      - name: Test all .py files
+        run: |
+          $failed = @()
+          Get-ChildItem -Filter "*.py" | ForEach-Object {
+            Write-Host "Testing: $($_.Name)"
+            python -m py_compile $_.FullName
+            if ($LASTEXITCODE -ne 0) {
+              $failed += $_.Name
+            } else {
+              Write-Host "✓ $($_.Name)"
+            }
+          }
+          if ($failed.Count -gt 0) {
+            Write-Host "FAILED: $($failed -join ', ')"
+            exit 1
+          } else {
+            Write-Host "All files OK"
+          }
+        shell: pwsh

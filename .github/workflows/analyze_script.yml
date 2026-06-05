@@ -1,0 +1,48 @@
+name: Analyze RE4 Master Editor
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  analyze:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint customtkinter
+
+      - name: Analyze all .py files
+        run: |
+          $files = Get-ChildItem -Filter "*.py"
+          if ($files.Count -eq 0) {
+            Write-Host "No .py files found"
+            exit 0
+          }
+          $anyFailed = $false
+          foreach ($file in $files) {
+            Write-Host "================================================"
+            Write-Host "Analyzing: $($file.Name)"
+            Write-Host "================================================"
+            pylint $file.FullName --output-format=text --score=yes --msg-template="{line}: [{symbol}] {msg}"
+            if ($LASTEXITCODE -ge 2) {
+              Write-Host "FAILED: $($file.Name) has errors"
+              $anyFailed = $true
+            } elseif ($LASTEXITCODE -eq 0) {
+              Write-Host "PERFECT: $($file.Name) — No issues found"
+            } else {
+              Write-Host "WARNINGS in $($file.Name) — check above"
+            }
+          }
+          if ($anyFailed) { exit 1 }
+        shell: pwsh
