@@ -1,8 +1,7 @@
 name: Analyze RE4 Master Editor
 
 on:
-  push:
-  pull_request:
+ workflow_call: 
 
 jobs:
   analyze:
@@ -35,14 +34,16 @@ jobs:
             Write-Host "Analyzing: $($file.Name)"
             Write-Host "================================================"
             pylint $file.FullName --output-format=text --score=yes --msg-template="{line}: [{symbol}] {msg}"
-            if ($LASTEXITCODE -ge 2) {
-              Write-Host "FAILED: $($file.Name) has errors"
+            $code = $LASTEXITCODE
+            if ($code -band 2) {
+              Write-Host "FAILED: $($file.Name) has real errors (exit code $code)"
               $anyFailed = $true
-            } elseif ($LASTEXITCODE -eq 0) {
+            } elseif ($code -eq 0) {
               Write-Host "PERFECT: $($file.Name) — No issues found"
             } else {
-              Write-Host "WARNINGS in $($file.Name) — check above"
+              Write-Host "OK: $($file.Name) — Only warnings/style issues (exit code $code)"
             }
           }
           if ($anyFailed) { exit 1 }
         shell: pwsh
+
