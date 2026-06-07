@@ -10500,10 +10500,61 @@ def _show_update_dialog(master_win, latest_tag, dl_url, dl_size=0, changelog="")
                 prog_var.set(t("جاري الاستخراج...", "Extracting..."))
                 _set_progress(100)
 
-                # Extract next to current script
-                extract_dir = os.path.dirname(os.path.abspath(__file__))
+                # Destination: directory of running EXE or script
+                if getattr(sys, "frozen", False):
+                    dest_dir = os.path.dirname(sys.executable)
+                    running_exe = sys.executable
+                else:
+                    dest_dir = os.path.dirname(os.path.abspath(__file__))
+                    running_exe = None
+
+                # Extract — strip top-level folder if present
                 with zipfile.ZipFile(zip_path, "r") as zf:
-                    zf.extractall(extract_dir)
+                    members = zf.namelist()
+                    root = ""
+                    if members:
+                        candidate = members[0].split("/")[0] + "/"
+                        if all(m.startswith(candidate) for m in members if m != candidate):
+                            root = candidate
+
+                    for member in members:
+                        rel = member[len(root):] if root and member.startswith(root) else member
+                        if not rel:
+                            continue
+                        target = os.path.join(dest_dir, rel.replace("/", os.sep))
+                        if member.endswith("/"):
+                            os.makedirs(target, exist_ok=True)
+                        else:
+                            os.makedirs(os.path.dirname(target), exist_ok=True)
+                            # EXE can't replace itself while running — write as .new
+                            if (running_exe and
+                                    os.path.normcase(target) == os.path.normcase(running_exe)):
+                                new_path = target + ".new"
+                                with zf.open(member) as src, open(new_path, "wb") as dst:
+                                    shutil.copyfileobj(src, dst)
+                            else:
+                                with zf.open(member) as src, open(target, "wb") as dst:
+                                    shutil.copyfileobj(src, dst)
+
+                # If running as EXE — create a bat to swap .new → .exe after exit
+                if running_exe and os.path.isfile(running_exe + ".new"):
+                    bat = os.path.join(dest_dir, "_update_swap.bat")
+                    exe_name = os.path.basename(running_exe)
+                    bat_content = (
+                        "@echo off\n"
+                        "timeout /t 2 /nobreak >nul\n"
+                        f"move /y \"{running_exe}.new\" \"{running_exe}\"\n"
+                        f"start \"\" \"{running_exe}\"\n"
+                        f"del \"%~f0\"\n"
+                    )
+                    with open(bat, "w") as f:
+                        f.write(bat_content)
+                    import subprocess
+                    subprocess.Popen(
+                        ["cmd", "/c", bat],
+                        creationflags=0x08000000,  # CREATE_NO_WINDOW
+                        close_fds=True
+                    )
 
                 shutil.rmtree(tmp_dir, ignore_errors=True)
 
