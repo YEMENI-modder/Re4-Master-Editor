@@ -10,21 +10,15 @@ contained within this repository, NOT the compiled production executable (.exe).
 You are fully permitted to download, view, test, and modify this Python source code 
 strictly for personal, private, and offline use.
 
-2. Public Distribution, Forking & Scope of Modifications:
-Public forks, mirrors, redistributions, and derivative repositories require prior written permission. 
-However, the necessity of this permission depends strictly on the scope of your modifications:
+2. Public Forking, Distribution & Derivative Works:
+Public forking and redistribution of this source code are permitted under the following strict conditions, depending on the purpose of the fork:
 
-- Minor Modifications (Permitted WITHOUT Permission): If your changes are minor—such as adding a 
-  new language translation (e.g., Portuguese) or adding a few new hex codes inside the Code Manager—you 
-  are permitted to fork, create a repository, or redistribute the code without prior authorization, 
-  provided that you clearly retain and credit YEMENI as the original author.
+- Forks for Contributions (Pull Requests): If you fork this repository with the intention of submitting a Pull Request (PR) to improve the official project, you are fully permitted to do so without any restrictions on the scope of modifications (whether the changes are minor or major/heavy).
   
-- Major Modifications (STRICTLY REQUIRES Permission): If your changes are extensive—such as redesigning 
-  the user interface, adding entirely new modules/sections, or rebuilding existing features from scratch—you 
-  MUST obtain explicit written permission from YEMENI before publishing or hosting the repository.
-
-- Additional Rule: Any permitted public derivative work or fork is strictly prohibited from being 
-  commercialized or sold; it must remain completely free and open-source.
+- Independent Forks, Remakes, or New Versions: If you fork this repository to create a different version, an independent variant, a remake, or a separate public repository, you do NOT need prior permission, but you MUST strictly comply with the following rules:
+  1. Credit the Original Author: You must clearly retain and credit YEMENI as the original author of the core software.
+  2. Maintain Open-Source: Your modified repository and its source code must remain completely public and open-source.
+  3. Strict Non-Commercialization: The derivative work or fork is strictly prohibited from being commercialized, monetized, or sold; it must remain 100% free of charge.
 
 3. Contributions & Pull Requests (PRs):
 Contributions to this repository are welcome. If you submit a Pull Request (PR) and your code is 
@@ -52,14 +46,5 @@ project's README.md and the in-app Credits section.
   behavior, as the software has been thoroughly tested across multiple environments and operating 
   systems without causing any harm. Use at your own risk.
 
+Failure to comply with these terms, such as commercializing independent forks, closing the source code, or removing author credits, will result in intellectual property enforcement actions, including the immediate filing of DMCA takedown requests.
 
-6. Contact Information for Authorizations:
-To request permission for major forks, public redistribution, or full source inquiries, 
-contact YEMENI directly through these official channels:
-- Discord: 5j_o
-- Instagram: kklop555
-- Gmail: altmymwyd80@gmail.com
-
-Failure to comply with these terms, or redistributing this source code publicly outside 
-the permitted minor scope without confirmation, may result in copyright enforcement actions, 
-including DMCA takedown requests.
