@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/Version-1.0.1-red?style=flat-square)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases/latest)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Winlator%20%7C%20Linux%20Wine-blue?style=flat-square)
-[![Game](https://img.shields.io/badge/Game-RE4%20UHD%202014-darkred?style=flat-square&logo=capcom&logoColor=white)](https://store.steampowered.com/app/254700/Resident_Evil_4_2004/)
+[![Game](https://img.shields.io/badge/Game-RE4%20UHD%202014-darkred?style=flat-square&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABXklEQVQ4jY2TvUvDUBTFT3I/SAtFm6GDoEIdOnTo4gVBnDo6ODgIdXAQp7p1L87+BYKDo0NdnDqIuIiCg6NIdbAIdbBw98bXwUuT96pBcXPhwXv3nDskwBwW0AAsAQtAb96bEEnu+g7Z5SgX2w6m89oAFgO7wAbwNAd93oG296MInFmZ+F1uC7gG6gNIP6wD+8Cc8KIdmK6vCHzVdsk+YBlYAdbH/R0wK/A0wzKAnVvXG+FwS8BscN7b7/B0Z8BqAL+gO4B7YAGfO7YCPG6vTqB/BvYCPAsG4PZ0F9jVdknAInAm6KdwpzvAbmCv9A2A/fH5gOf9/bO+Y6t4D6wAn7I1GfU9sAzYJmAD6M8oZgMeK6066O/ZmgN7gV1gT+CjL/VqB6Z71N6M4EftvV6D5eA/FfgR6XvD83bwnwp8F30XWBr6U6YgLgO/X7b3O6wB9wOfe9VwO/gG3779+3A6p60AAAAASUVORK5CYII=)](https://store.steampowered.com/app/254700/Resident_Evil_4_2004/)
 ![Language](https://img.shields.io/badge/Language-🇺🇸%20EN%20%7C%20🇸🇦%20AR-green?style=flat-square)
 ![Codes](https://img.shields.io/badge/Codes-180%2B-orange?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
