@@ -1,5 +1,5 @@
 """
-RE4 Master Editor v1.0.1
+RE4 Master Editor v2.0.0
 ========================
 Unified RE4 modding suite  single file.
 All modules embedded.
@@ -23,6 +23,8 @@ import re
 import json
 import ctypes
 import struct
+import random
+import webbrowser
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.scrolledtext as scrolledtext
@@ -166,7 +168,7 @@ if getattr(sys, "frozen", False):
 else:
     _ROOT = os.path.dirname(os.path.abspath(__file__))
 
-APP_VERSION = "V1.1"
+APP_VERSION = "V2"
 GITHUB_REPO  = "YEMENI-modder/Re4-Master-Editor"
 GITHUB_API   = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 GITHUB_ZIP   = "RE4.Master.Editor.zip"
@@ -176,8 +178,116 @@ MASTER_DIR = os.path.join(_ROOT, "RE4 MASTER EDITOR")
 #  master settings 
 _MSETTINGS_FILE = os.path.join(MASTER_DIR, "master_settings.json")
 
+
+# ── Recently Used Files (persisted) ──────────────────────────────────────────
+_RECENT_MAX   = 5
+_RECENT_FILE  = os.path.join(
+    os.path.dirname(os.path.abspath(sys.argv[0])),
+    "RE4 MASTER EDITOR", "recent_files.json"
+)
+_RECENT_DATA: dict = {}   # {"osd": ["path1","path2",...], ...}
+
+def _load_recent():
+    global _RECENT_DATA
+    try:
+        if os.path.isfile(_RECENT_FILE):
+            with open(_RECENT_FILE, encoding="utf-8") as f:
+                _RECENT_DATA = json.load(f)
+    except Exception:
+        _RECENT_DATA = {}
+
+def _save_recent():
+    try:
+        os.makedirs(os.path.dirname(_RECENT_FILE), exist_ok=True)
+        with open(_RECENT_FILE, "w", encoding="utf-8") as f:
+            json.dump(_RECENT_DATA, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+def recent_push(section_key: str, path: str):
+    """Add path to the recently-used list for section_key."""
+    if not path:
+        return
+    lst = _RECENT_DATA.get(section_key, [])
+    if path in lst:
+        lst.remove(path)
+    lst.insert(0, path)
+    _RECENT_DATA[section_key] = lst[:_RECENT_MAX]
+    _save_recent()
+
+def recent_get(section_key: str) -> list:
+    return [p for p in _RECENT_DATA.get(section_key, []) if os.path.isfile(p)]
+
+def recent_menu(section_key: str, parent_widget, on_select, label_ar="الملفات الأخيرة", label_en="Recent Files"):
+    """
+    Build and show a pop-up menu of recently used files below parent_widget.
+    on_select(path) is called when user picks one.
+    Returns the menu (caller can ignore it).
+    """
+    items = recent_get(section_key)
+    lbl = label_en if CURRENT_LANG == "en" else label_ar
+    menu = tk.Menu(parent_widget, tearoff=0,
+                   bg="#1a1a1a", fg="#ccc",
+                   activebackground="#2a2a2a", activeforeground="#fff",
+                   font=("Courier New", 8))
+    if items:
+        for p in items:
+            disp = p
+            menu.add_command(label=disp,
+                             command=lambda _p=p: on_select(_p))
+    else:
+        menu.add_command(label=t("لا يوجد ملفات حديثة","No recent files"),
+                         state="disabled")
+    x = parent_widget.winfo_rootx()
+    y = parent_widget.winfo_rooty() + parent_widget.winfo_height()
+    menu.tk_popup(x, y)
+    return menu
+
+
+# ── Drag & Drop ──────────────────────────────────────────────────────────────
+def _setup_drop(widget, on_drop, allowed_exts=None):
+    """
+    Register widget for file drag-and-drop via tkinterdnd2.
+    on_drop(path) called with the dropped file path.
+    allowed_exts: list of lowercase extensions e.g. ['.osd'] — None = accept all.
+    Silent no-op if tkinterdnd2 is not installed.
+    """
+    try:
+        from tkinterdnd2 import DND_FILES
+        def _handle(event):
+            raw = event.data.strip()
+            if raw.startswith("{") and raw.endswith("}"):
+                path = raw[1:-1]
+            else:
+                path = raw
+            path = path.strip()
+            if not path:
+                return
+            if allowed_exts:
+                ext = os.path.splitext(path)[1].lower()
+                if ext not in allowed_exts:
+                    return
+            on_drop(path)
+        widget.drop_target_register(DND_FILES)
+        widget.dnd_bind("<<Drop>>", _handle)
+    except Exception:
+        pass
+
+
+def _highlight_drop(widget, active: bool):
+    """Flash a brief green border on the widget to acknowledge a drop."""
+    try:
+        if active:
+            widget.configure(highlightbackground="#7cfc7c", highlightthickness=2)
+        else:
+            widget.configure(highlightthickness=1)
+    except Exception:
+        pass
+
+
 def load_master_settings():
-    d = {"lang": "en", "remember_exe": True, "last_exe": "", "first_run": True}
+    d = {"lang": "en", "remember_exe": True, "last_exe": "", "first_run": True,
+         "remember_last_panel": False, "last_panel": ""}
     if os.path.isfile(_MSETTINGS_FILE):
         try:
             with open(_MSETTINGS_FILE, encoding="utf-8") as f:
@@ -196,6 +306,7 @@ def save_master_settings(s):
 
 MASTER_SETTINGS = load_master_settings()
 _load_browse_dirs()
+_load_recent()
 
 
 # 
@@ -581,6 +692,7 @@ def load_settings():
         "auto_scan_startup": False,
         "auto_scan_change":  True,
         "real_time_mode":    False,
+        "pinned_codes":      [],
     }
     if os.path.isfile(SETTINGS_FILE):
         try:
@@ -1433,9 +1545,10 @@ def _get_item_list_categorized():
 
 class CodeRow(tk.Frame):
     def __init__(self, parent, code, app, **kw):
+        _is_pinned = code["id"] in app._pinned_codes
         super().__init__(parent, bg=BG_ROW,
                          highlightthickness=1,
-                         highlightbackground=BORDER, **kw)
+                         highlightbackground="#c8a035" if _is_pinned else BORDER, **kw)
         self.code      = code
         self.app       = app
         self._expanded = False
@@ -1632,6 +1745,23 @@ class CodeRow(tk.Frame):
             )
             self.arrow_btn.pack(side="right", padx=4)
 
+        #  Pin button 
+        _is_pinned = self.code["id"] in self.app._pinned_codes
+        self.pin_btn = tk.Button(
+            top,
+            text="P",
+            font=("Courier New", 8, "bold"),
+            fg="#c8a035" if _is_pinned else "#333",
+            bg="#1a1500" if _is_pinned else BG_ROW,
+            activeforeground="#c8a035", activebackground="#1a1500",
+            relief="flat", bd=0, cursor="hand2",
+            highlightthickness=1,
+            highlightbackground="#c8a035" if _is_pinned else "#222",
+            width=2, padx=3, pady=1,
+            command=self._on_pin
+        )
+        self.pin_btn.pack(side="right", padx=(0, 4))
+
         #  Permanent Activation checkbox (RT mode only) 
         self.perm_var = tk.BooleanVar(value=False)
         self.perm_chk = tk.Checkbutton(
@@ -1701,6 +1831,11 @@ class CodeRow(tk.Frame):
                     "شغّل الكود أولاً قبل ما تحدد القيمة."
                 )
                 return
+        exe        = self.app.exe_path.get().strip()
+        if not exe or not os.path.isfile(exe):
+            messagebox.showerror("Error", "Please select a valid bio4.exe file.")
+            return
+        entry_data = self.app.codes_data.get(code_id, {})
         offset     = entry_data.get("offset", "")
         byte_count = entry_data.get("byte_count", 1)
         divide_by  = entry_data.get("divide_by", 1)
@@ -1711,7 +1846,24 @@ class CodeRow(tk.Frame):
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid positive number.")
             return
+
         actual_val = dec_val // divide_by if divide_by > 1 else dec_val
+
+        # Range check based on byte_count (special-case: plaga_spawn_pct is 0-100%)
+        if code_id == "plaga_spawn_pct":
+            max_dec = 100 * divide_by if divide_by > 1 else 100
+        else:
+            max_dec = ((1 << (byte_count * 8)) - 1) * (divide_by if divide_by > 1 else 1)
+
+        if dec_val > max_dec:
+            messagebox.showerror(
+                "Error",
+                f"Value too large. Max allowed = {max_dec}."
+                if CURRENT_LANG == "en" else
+                f"القيمة كبيرة جداً. الحد الأقصى = {max_dec}."
+            )
+            return
+
         hex_bytes  = actual_val.to_bytes(byte_count, byteorder="little").hex().upper()
 
         # apply any prerequisite patches (e.g. ON patch for random_ptas)
@@ -1736,6 +1888,7 @@ class CodeRow(tk.Frame):
             messagebox.showerror("Error", str(ex))
             return
         self.app.applied[code_id] = True
+        self.app._numeric_current[code_id] = dec_val
         name = self.code.get("name_en" if CURRENT_LANG == "en" else "name", code_id)
         write_log("APPLIED", name + " = " + str(dec_val), exe)
         if not APP_SETTINGS.get("silent_apply", False):
@@ -1753,6 +1906,9 @@ class CodeRow(tk.Frame):
 
     def _on_toggle(self):
         self.app.handle_toggle(self.code["id"])
+
+    def _on_pin(self):
+        self.app._toggle_pin(self.code["id"])
 
     def _on_select(self):
         if self.sel_var.get() == 1 and not self.app._is_unlocked(self.code["id"]):
@@ -2000,6 +2156,8 @@ class RE4PatcherApp(tk.Frame):
         self._rt_originals    = {}  # RT mode: {code_id: {offset: orig_hex}}
         self.active_section   = None
         self._global_selected = set()
+        self._filter_status   = "all"   # "all" | "applied" | "not_applied"
+        self._pinned_codes    = set(APP_SETTINGS.get("pinned_codes", []))
 
         self.codes_info = load_json(INFO_FILE)
         _data_file = RT_DATA_FILE if APP_SETTINGS.get("real_time_mode", False) and os.path.isfile(RT_DATA_FILE) else DATA_FILE
@@ -2022,6 +2180,7 @@ class RE4PatcherApp(tk.Frame):
                     "offset": "002B5848",
                     "bytes": f"{_base} 50 {_tail}",
                 }]
+
 
         self.sections_list    = self.codes_info["sections"]
         self.all_codes        = self.codes_info["codes"]
@@ -2070,7 +2229,7 @@ class RE4PatcherApp(tk.Frame):
         rt_on = APP_SETTINGS.get("real_time_mode", False)
         self._mode_indicator = tk.Label(
             topbar,
-            text="⚡ RT" if rt_on else "📄 Normal",
+            text="RT" if rt_on else "Normal",
             fg="#ff9060" if rt_on else "#555555",
             bg=BG_TOPBAR,
             font=("Courier New", 8, "bold"),
@@ -2192,6 +2351,42 @@ class RE4PatcherApp(tk.Frame):
                     fg=MUTED, bg="#1a1a1a", active_bg="#2a2a2a",
                     font=FONT_TINY, width=2
                     ).pack(side="left", padx=4)
+
+        # ── Filter by Status ──
+        filter_bar = tk.Frame(right, bg=BG_PATHBAR)
+        filter_bar.pack(fill="x", padx=10, pady=(3, 0))
+
+        make_label(filter_bar, text=t("فلتر:","Filter:"),
+                   fg=TEXT_DIM, bg=BG_PATHBAR, font=FONT_TINY).pack(side="left", padx=(0, 4))
+
+        self._filter_btns = {}
+        filter_opts = [
+            ("all",         t("الكل",       "All")),
+            ("applied",     t("مفعّل",      "Applied")),
+            ("not_applied", t("غير مفعّل",  "Not Applied")),
+        ]
+        for fid, flabel in filter_opts:
+            is_active = (fid == self._filter_status)
+            btn = tk.Button(
+                filter_bar, text=flabel,
+                font=FONT_TINY,
+                fg=_GOLD if is_active else MUTED,
+                bg="#1a1500" if is_active else "#111",
+                activeforeground=_GOLD, activebackground="#2a2000",
+                relief="flat", bd=0, cursor="hand2",
+                highlightthickness=1,
+                highlightbackground=_GOLD if is_active else "#222",
+                padx=6, pady=1,
+                command=lambda f=fid: self._set_filter(f)
+            )
+            btn.pack(side="left", padx=2)
+            self._filter_btns[fid] = btn
+
+        # Ctrl+F → focus search box
+        self.winfo_toplevel().bind("<Control-f>", lambda e: (
+            self.search_entry.focus_set(),
+            self.search_entry.select_range(0, "end")
+        ), add="+")
 
         # search results frame (hidden by default)  with scrollable canvas
         self.search_results_outer = tk.Frame(right, bg="#0d0d1a",
@@ -2515,17 +2710,17 @@ class RE4PatcherApp(tk.Frame):
 
         prof_row = tk.Frame(inner, bg="#111")
         prof_row.pack(pady=2)
-        make_button(prof_row, "New Profile", lambda: [dlg.destroy(), self._new_profile()],
+        make_button(prof_row, "New Profile" if CURRENT_LANG == "en" else "إنشاء بروفايل", lambda: [dlg.destroy(), self._new_profile()],
                     fg=ACCENT, bg="#2a2a0a", active_bg="#3a3a1a", width=12
                     ).pack(side="left", padx=6)
-        make_button(prof_row, "Load Profile", lambda: [dlg.destroy(), self._load_profile()],
+        make_button(prof_row, "Load Profile" if CURRENT_LANG == "en" else "تحميل بروفايل", lambda: [dlg.destroy(), self._load_profile()],
                     fg=GREEN, bg="#1a2a0a", active_bg="#2a4a1a", width=12
                     ).pack(side="left", padx=6)
 
         # ══ Section 4: Custom Codes ══
         section_header("Custom Codes", "أكواد مخصصة", color=ACCENT2)
 
-        make_button(inner, "Add New Code", lambda: [dlg.destroy(), self._add_new_code()],
+        make_button(inner, "Add New Code" if CURRENT_LANG == "en" else "إضافة كود جديد", lambda: [dlg.destroy(), self._add_new_code()],
                     fg=ACCENT2, bg="#1a1a2a", active_bg="#2a2a3a", width=14
                     ).pack(pady=(0, 4))
 
@@ -2534,11 +2729,11 @@ class RE4PatcherApp(tk.Frame):
 
         cmp_row = tk.Frame(inner, bg="#111")
         cmp_row.pack(pady=2)
-        make_button(cmp_row, "Compare Two EXEs",
+        make_button(cmp_row, "Compare Two EXEs" if CURRENT_LANG == "en" else "مقارنة بين EXE مختلفين",
                     lambda: [dlg.destroy(), self._compare_two_exes()],
                     fg=ACCENT, bg="#2a2a0a", active_bg="#3a3a1a", width=16
                     ).pack(side="left", padx=4)
-        make_button(cmp_row, "Compare with Original",
+        make_button(cmp_row, "Compare with Original" if CURRENT_LANG == "en" else "مقارنة بالأصلي",
                     lambda: [dlg.destroy(), self._compare_with_original()],
                     fg="#60c8ff", bg="#0a1a2a", active_bg="#1a2a3a", width=18
                     ).pack(side="left", padx=4)
@@ -2556,7 +2751,7 @@ class RE4PatcherApp(tk.Frame):
         section_header("Restore", "استعادة EXE", color="#e8c060")
 
         make_button(inner,
-                    "Restore from bio4_original.exe" if CURRENT_LANG == "en" else "استعادة من bio4_original.exe",
+                    "Restore from original" if CURRENT_LANG == "en" else "استعادة من الأصلي",
                     lambda: [dlg.destroy(), self._restore_original_exe()],
                     fg="#e8c060", bg="#1a1500", active_bg="#2a2000", width=26
                     ).pack(pady=(0, 4))
@@ -2565,7 +2760,7 @@ class RE4PatcherApp(tk.Frame):
         section_header("Danger Zone", "منطقة الخطر", color="#ff6060")
 
         make_button(inner,
-                    "Reset All Codes" if CURRENT_LANG == "en" else "إعادة تعيين كل الأكواد",
+                    "Reset All Codes" if CURRENT_LANG == "en" else "إعادة تعيين\nكل الأكواد",
                     lambda: [dlg.destroy(), self._reset_all_codes()],
                     fg="#ff6060", bg="#2a0a0a", active_bg="#3a1010", width=16
                     ).pack(pady=(0, 12))
@@ -3065,6 +3260,10 @@ class RE4PatcherApp(tk.Frame):
         self.code_rows.clear()
 
         codes = self.codes_by_section.get(section_id, [])
+
+        # Sort: pinned first, then by filter status (applied/not_applied/pinned)
+        codes = sorted(codes, key=lambda c: self._code_sort_key(c["id"]))
+
         self.section_count_var.set("  " + str(len(codes)) + " codes")
 
         if not codes:
@@ -4639,7 +4838,10 @@ class RE4PatcherApp(tk.Frame):
                 # Permanent Activation: write to the running EXE on disk
                 row = self.code_rows.get(code_id)
                 if row and getattr(row, "perm_var", None) and row.perm_var.get():
-                    running_exe = _rt_get_running_exe_path(pid)
+                    _perm_pid, _perm_h = _rt_get_process_handle()
+                    running_exe = _rt_get_running_exe_path(_perm_pid) if _perm_pid else None
+                    if _perm_h:
+                        _ctypes.windll.kernel32.CloseHandle(_perm_h)
                     perm_target = running_exe if running_exe and os.path.isfile(running_exe) else exe
                     ok2, msg2 = apply_patch(perm_target, code_id, self.codes_data, mod_expansion)
                     if ok2:
@@ -4837,9 +5039,8 @@ class RE4PatcherApp(tk.Frame):
         "survive_chainsaw": ["saw_killable"],
         # u3: esl vs form1 share offset 1034CA
         "u3_esl":        ["u3_form1_kill"],
-        "u3_form1_kill": ["u3_esl"],
-        # u3: form1 vs die_in_place share offset FE9C2
-        "u3_form1_kill":  ["u3_die_in_place"],
+        # u3: form1 vs die_in_place share offset FE9C2, and vs esl share 1034CA
+        "u3_form1_kill":  ["u3_die_in_place", "u3_esl"],
         "u3_die_in_place": ["u3_form1_kill"],
         # xwb sideload vs em_xwb_xsb share offset 575487
         "xwb_sideload_r": ["em_xwb_xsb"],
@@ -4934,6 +5135,65 @@ class RE4PatcherApp(tk.Frame):
             ("Total codes: " if CURRENT_LANG == "en" else "إجمالي الأكواد: ") + str(n_total))
 
     #  Search 
+
+    def _set_filter(self, fid):
+        """Switch filter status and re-render current section immediately."""
+        self._filter_status = fid
+        _GOLD = "#c8a035"
+        for bid, btn in self._filter_btns.items():
+            active = (bid == fid)
+            btn.configure(
+                fg=_GOLD if active else MUTED,
+                bg="#1a1500" if active else "#111",
+                highlightbackground=_GOLD if active else "#222"
+            )
+        if self.active_section:
+            self._quick_reload()
+
+    def _code_visible(self, code_id):
+        """Hide codes that don't match the current filter."""
+        if self._filter_status == "applied":
+            return self.applied.get(code_id, False)
+        if self._filter_status == "not_applied":
+            return not self.applied.get(code_id, False)
+        return True  # "all" — show everything
+
+    def _code_sort_key(self, code_id):
+        """Sort key: pinned first (only in All), then applied status."""
+        is_pinned  = code_id in self._pinned_codes
+        is_applied = self.applied.get(code_id, False)
+
+        # Pin only affects "all" — ignored in applied/not_applied
+        if self._filter_status == "all":
+            pin_key = 0 if is_pinned else 1
+        else:
+            pin_key = 0
+
+        if self._filter_status == "applied":
+            status_key = 0 if is_applied else 1
+        elif self._filter_status == "not_applied":
+            status_key = 0 if not is_applied else 1
+        else:
+            status_key = 0
+
+        return (pin_key, status_key)
+
+    def _toggle_pin(self, code_id):
+        """Pin or unpin a code — persists in settings."""
+        if code_id in self._pinned_codes:
+            self._pinned_codes.discard(code_id)
+        else:
+            self._pinned_codes.add(code_id)
+        APP_SETTINGS["pinned_codes"] = list(self._pinned_codes)
+        save_settings(APP_SETTINGS)
+        if self.active_section:
+            self._quick_reload()
+
+    def _quick_reload(self):
+        """Re-run scan then refresh the current section. Used by filter and pin."""
+        self._scan()
+        if self.active_section:
+            self.select_section(self.active_section)
 
     def _on_search(self):
         query = self.search_var.get().strip().lower()
@@ -5486,6 +5746,7 @@ class SpeechColorPanel(tk.Frame):
 
     def __init__(self, parent, master_app, **kw):
         super().__init__(parent, bg="#0b0b0b", **kw)
+        self.bind_all("<Control-s>", lambda e: self._save_txt())
         self.master_app  = master_app
         self._txt_path   = tk.StringVar()
         self._entries    = []
@@ -5516,11 +5777,18 @@ class SpeechColorPanel(tk.Frame):
         top.pack(fill="x", padx=12, pady=8)
         tk.Label(top, text=t("ملف Txt:","TXT File:"), fg="#999", bg="#111",
                  font=("Courier New", 9)).pack(side="left")
-        tk.Entry(top, textvariable=self._txt_path,
+        self._mdt_entry = tk.Entry(top, textvariable=self._txt_path,
                  font=("Courier New", 9), fg="#7cfc7c", bg="#0d1a0d",
                  insertbackground="#7cfc7c", relief="flat", bd=0,
                  highlightthickness=1, highlightbackground="#2a5a2a",
-                 width=40).pack(side="left", ipady=3, padx=6)
+                 width=40)
+        self._mdt_entry.pack(side="left", ipady=3, padx=6)
+        _setup_drop(self._mdt_entry,
+                    lambda p: (self._txt_path.set(p),
+                               _highlight_drop(self._mdt_entry, True),
+                               self.after(600, lambda: _highlight_drop(self._mdt_entry, False)),
+                               self._load()),
+                    allowed_exts=[".txt"])
         tk.Button(top, text=t("تصفح","Browse"), font=("Courier New", 8),
                   fg="#c8a035", bg="#1a1500", activeforeground="#c8a035",
                   activebackground="#2a2000", relief="flat", bd=0,
@@ -6045,6 +6313,7 @@ class CNSEditorPanel(tk.Frame):
 
     def __init__(self, parent, master_app, **kw):
         super().__init__(parent, bg="#0b0b0b", **kw)
+        self.bind_all("<Control-s>", lambda e: self._save_all())
         self.master_app = master_app
         self._vars      = {}
         self._built     = False
@@ -6478,6 +6747,7 @@ class AEVOptionPanel(tk.Frame):
 
     def __init__(self, parent, master_app, **kw):
         super().__init__(parent, bg="#0b0b0b", **kw)
+        self.bind_all("<Control-s>", lambda e: self._save())
         self.master_app = master_app
         self._txt_path  = tk.StringVar()
         self._build()
@@ -6501,17 +6771,34 @@ class AEVOptionPanel(tk.Frame):
         self._txt_path = tk.StringVar()
         tk.Label(toolbar, text=t("ملف TXT:", "TXT File:"), fg="#888888", bg="#0b0b0b",
                  font=("Courier New", 9)).pack(side="left")
-        tk.Entry(toolbar, textvariable=self._txt_path,
+        self._aev_entry = tk.Entry(toolbar, textvariable=self._txt_path,
                  font=("Courier New", 9), fg="#7cfc7c", bg="#0d1a0d",
                  insertbackground="#7cfc7c", relief="flat", bd=0,
                  highlightthickness=1, highlightbackground="#2a5a2a",
-                 width=36).pack(side="left", ipady=3, padx=6)
+                 width=36)
+        self._aev_entry.pack(side="left", ipady=3, padx=6)
+        _setup_drop(self._aev_entry,
+                    lambda p: (self._txt_path.set(p),
+                               _highlight_drop(self._aev_entry, True),
+                               self.after(600, lambda: _highlight_drop(self._aev_entry, False)),
+                               self._load()),
+                    allowed_exts=[".txt"])
         tk.Button(toolbar, text=t("تصفح", "Browse"),
                   font=("Courier New", 8), fg="#c8a035", bg="#1a1500",
                   activeforeground="#c8a035", activebackground="#2a2000",
                   relief="flat", bd=0, cursor="hand2",
                   highlightthickness=1, highlightbackground="#c8a035",
                   command=self._browse, padx=8, pady=2).pack(side="left")
+        self._aev_recent_btn = tk.Button(toolbar, text=t("▾ الأخيرة","▾ Recent"),
+                  font=("Courier New", 8), fg="#888", bg="#1a1a1a",
+                  activeforeground="#ccc", activebackground="#2a2a2a",
+                  relief="flat", bd=0, cursor="hand2",
+                  highlightthickness=1, highlightbackground="#333",
+                  padx=7, pady=2)
+        self._aev_recent_btn.configure(command=lambda: recent_menu(
+            "aev_txt", self._aev_recent_btn,
+            lambda p: (self._txt_path.set(p), self._load())))
+        self._aev_recent_btn.pack(side="left", padx=3)
         tk.Button(toolbar, text=t("تحميل", "Load"),
                   font=("Courier New", 8), fg="#7cfc7c", bg="#1a2a0a",
                   activeforeground="#7cfc7c", activebackground="#2a4a1a",
@@ -6618,6 +6905,7 @@ class AEVOptionPanel(tk.Frame):
         except Exception as e:
             messagebox.showerror("Error", str(e))
             return
+        recent_push("aev_txt", path)
         self._render(self._raw)
 
     def _on_char_mode_change(self):
@@ -7196,18 +7484,35 @@ class EventsCFGPanel(tk.Frame):
         top = tk.Frame(self, bg="#111"); top.pack(fill="x", padx=12, pady=8)
         tk.Label(top, text=t("ملف Cfg:","CFG File:"), fg="#999", bg="#111",
                  font=("Courier New", 9)).pack(side="left")
-        tk.Entry(top, textvariable=self._cfg_path,
+        self._cfg_entry = tk.Entry(top, textvariable=self._cfg_path,
                  font=("Courier New", 9), fg="#5bc8c8", bg="#081a1a",
                  insertbackground="#5bc8c8",
                  relief="flat", bd=0,
                  highlightthickness=1, highlightbackground="#1a5a5a",
-                 width=42).pack(side="left", ipady=3, padx=6)
+                 width=42)
+        self._cfg_entry.pack(side="left", ipady=3, padx=6)
+        _setup_drop(self._cfg_entry,
+                    lambda p: (self._cfg_path.set(p),
+                               _highlight_drop(self._cfg_entry, True),
+                               self.after(600, lambda: _highlight_drop(self._cfg_entry, False)),
+                               self._load()),
+                    allowed_exts=[".cfg"])
         tk.Button(top, text=t("تصفح", "Browse"),
                   font=("Courier New", 8), fg="#c8a035", bg="#1a1500",
                   activeforeground="#c8a035", activebackground="#2a2000",
                   relief="flat", bd=0, cursor="hand2",
                   highlightthickness=1, highlightbackground="#c8a035",
                   command=self._browse, padx=8, pady=2).pack(side="left")
+        self._cfg_recent_btn = tk.Button(top, text=t("▾ الأخيرة","▾ Recent"),
+                  font=("Courier New", 8), fg="#888", bg="#1a1a1a",
+                  activeforeground="#ccc", activebackground="#2a2a2a",
+                  relief="flat", bd=0, cursor="hand2",
+                  highlightthickness=1, highlightbackground="#333",
+                  padx=7, pady=2)
+        self._cfg_recent_btn.configure(command=lambda: recent_menu(
+            "events_cfg", self._cfg_recent_btn,
+            lambda p: (self._cfg_path.set(p), self._load())))
+        self._cfg_recent_btn.pack(side="left", padx=3)
         tk.Button(top, text=t("تحميل", "Load"),
                   font=("Courier New", 8), fg="#5bc8c8", bg="#081a1a",
                   activeforeground="#5bc8c8", activebackground="#0f2a2a",
@@ -7272,6 +7577,7 @@ class EventsCFGPanel(tk.Frame):
                 raw = f.read()
         except Exception as e:
             messagebox.showerror("Error", str(e)); return
+        recent_push("events_cfg", path)
         self._locks = self._parse(raw)
         self._count_var.set(f'{t("عدد الأقفال","Locks")}: {len(self._locks)}')
         self._render()
@@ -7545,6 +7851,7 @@ class AVLEditorPanel(tk.Frame):
 
     def __init__(self, parent, master_app, **kw):
         super().__init__(parent, bg="#0b0b0b", **kw)
+        self.bind_all("<Control-s>", lambda e: self._save())
         self.master_app = master_app
         self._avl_path  = tk.StringVar()
         self._entries   = []   # list of dicts, one per AVL entry
@@ -7573,13 +7880,19 @@ class AVLEditorPanel(tk.Frame):
         tk.Label(top, text=t("ملف AVL:", "AVL File:"), fg="#999", bg="#111",
                  font=("Courier New", 9)).pack(side="left")
 
-        tk.Entry(top, textvariable=self._avl_path,
+        self._avl_entry = tk.Entry(top, textvariable=self._avl_path,
                  font=("Courier New", 9), fg="#7cfc7c", bg="#0d1a0d",
                  insertbackground="#7cfc7c",
                  relief="flat", bd=0,
                  highlightthickness=1, highlightbackground="#2a5a2a",
-                 width=40).pack(side="left", ipady=3, padx=6)
-
+                 width=40)
+        self._avl_entry.pack(side="left", ipady=3, padx=6)
+        _setup_drop(self._avl_entry,
+                    lambda p: (self._avl_path.set(p),
+                               _highlight_drop(self._avl_entry, True),
+                               self.after(600, lambda: _highlight_drop(self._avl_entry, False)),
+                               self._load()),
+                    allowed_exts=[".avl"])
         tk.Button(top, text=t("تصفح", "Browse"),
                   font=("Courier New", 8), fg="#c8a035", bg="#1a1500",
                   activeforeground="#c8a035", activebackground="#2a2000",
@@ -7587,6 +7900,17 @@ class AVLEditorPanel(tk.Frame):
                   highlightthickness=1, highlightbackground="#c8a035",
                   command=self._browse, padx=8, pady=2
                   ).pack(side="left")
+
+        self._avl_recent_btn = tk.Button(top, text=t("▾ الأخيرة","▾ Recent"),
+                  font=("Courier New", 8), fg="#888", bg="#1a1a1a",
+                  activeforeground="#ccc", activebackground="#2a2a2a",
+                  relief="flat", bd=0, cursor="hand2",
+                  highlightthickness=1, highlightbackground="#333",
+                  padx=7, pady=2)
+        self._avl_recent_btn.configure(command=lambda: recent_menu(
+            "avl", self._avl_recent_btn,
+            lambda p: (self._avl_path.set(p), self._load())))
+        self._avl_recent_btn.pack(side="left", padx=3)
 
         tk.Button(top, text=t("تحميل", "Load"),
                   font=("Courier New", 8), fg="#7cfc7c", bg="#1a2a0a",
@@ -7656,15 +7980,45 @@ class AVLEditorPanel(tk.Frame):
             self._load()
 
     def _save(self):
-        txt_path = self._txt_path.get().strip()
-        if not txt_path:
-            messagebox.showerror("Error", "No file loaded."); return
-        if not self._raw:
-            messagebox.showerror("Error", "Nothing to save."); return
+        path = self._avl_path.get().strip()
+        if not path or not os.path.isfile(path):
+            messagebox.showerror("Error", "No file loaded.")
+            return
+
+        offsets = [15, 30, 47, 63, 79, 95, 111]
+
+        # collect current values from the UI back into self._entries
+        for entry, row_vars in zip(self._entries, self._entry_vars):
+            for i, (_kind, var, _a, _b) in row_vars.items():
+                try:
+                    entry["vals"][i] = int(var.get().strip(), 16) & 0xFF
+                except ValueError:
+                    messagebox.showerror("Error", f"Invalid hex value in field {i+1}.")
+                    return
+
         try:
-            with open(txt_path, "w", encoding="utf-8") as f:
-                f.write(self._raw)
-            messagebox.showinfo("[+] Saved", f"Saved to:\n{txt_path}")
+            with open(path, "r+b") as f:
+                data = f.read()
+                skipped = 0
+                for entry in self._entries:
+                    start = entry["start"]
+                    if start < 0:
+                        skipped += 1
+                        continue
+                    for i, off in enumerate(offsets):
+                        byte_pos = start + off
+                        if byte_pos < len(data):
+                            f.seek(byte_pos)
+                            f.write(bytes([entry["vals"].get(i, 0)]))
+            if skipped:
+                messagebox.showinfo(
+                    "[+] Saved",
+                    f"Saved to:\n{path}\n\n"
+                    f"{skipped} new lock(s) were not written "
+                    f"(adding new AVL entries is not supported yet)."
+                )
+            else:
+                messagebox.showinfo("[+] Saved", f"Saved to:\n{path}")
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
@@ -7679,6 +8033,7 @@ class AVLEditorPanel(tk.Frame):
         except Exception as e:
             messagebox.showerror("Error", str(e))
             return
+        recent_push("avl", path)
 
         # parse entries
         # look for header "Number of Aev--"
@@ -8078,18 +8433,35 @@ class OSDEditorPanel(tk.Frame):
         top.pack(fill="x", padx=12, pady=8)
         tk.Label(top, text=t("ملف OSD:", "OSD File:"), fg="#999", bg="#111",
                  font=("Courier New", 9)).pack(side="left")
-        tk.Entry(top, textvariable=self._osd_path,
+        self._osd_entry = tk.Entry(top, textvariable=self._osd_path,
                  font=("Courier New", 9), fg="#7cfc7c", bg="#0d1a0d",
                  insertbackground="#7cfc7c",
                  relief="flat", bd=0,
                  highlightthickness=1, highlightbackground="#2a5a2a",
-                 width=44).pack(side="left", ipady=3, padx=6)
+                 width=44)
+        self._osd_entry.pack(side="left", ipady=3, padx=6)
+        _setup_drop(self._osd_entry,
+                    lambda p: (self._osd_path.set(p),
+                               _highlight_drop(self._osd_entry, True),
+                               self.after(600, lambda: _highlight_drop(self._osd_entry, False)),
+                               self._load()),
+                    allowed_exts=[".osd"])
         tk.Button(top, text=t("تصفح","Browse"),
                   font=("Courier New", 8), fg="#c8a035", bg="#1a1500",
                   activeforeground="#c8a035", activebackground="#2a2000",
                   relief="flat", bd=0, cursor="hand2",
                   highlightthickness=1, highlightbackground="#c8a035",
                   command=self._browse, padx=8, pady=2).pack(side="left")
+        self._osd_recent_btn = tk.Button(top, text=t("▾ الأخيرة","▾ Recent"),
+                  font=("Courier New", 8), fg="#888", bg="#1a1a1a",
+                  activeforeground="#ccc", activebackground="#2a2a2a",
+                  relief="flat", bd=0, cursor="hand2",
+                  highlightthickness=1, highlightbackground="#333",
+                  padx=7, pady=2)
+        self._osd_recent_btn.configure(command=lambda: recent_menu(
+            "osd", self._osd_recent_btn,
+            lambda p: (self._osd_path.set(p), self._load())))
+        self._osd_recent_btn.pack(side="left", padx=3)
         tk.Button(top, text=t("تحميل","Load"),
                   font=("Courier New", 8), fg="#7cfc7c", bg="#1a2a0a",
                   activeforeground="#7cfc7c", activebackground="#2a4a1a",
@@ -8153,19 +8525,6 @@ class OSDEditorPanel(tk.Frame):
             self._osd_path.set(p)
             self._load()
 
-    def _save(self):
-        txt_path = self._txt_path.get().strip()
-        if not txt_path:
-            messagebox.showerror("Error", "No file loaded."); return
-        if not self._raw:
-            messagebox.showerror("Error", "Nothing to save."); return
-        try:
-            with open(txt_path, "w", encoding="utf-8") as f:
-                f.write(self._raw)
-            messagebox.showinfo("[+] Saved", f"Saved to:\n{txt_path}")
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
-
     def _load(self):
         path = self._osd_path.get().strip()
         if not path or not os.path.isfile(path):
@@ -8177,6 +8536,7 @@ class OSDEditorPanel(tk.Frame):
         except Exception as e:
             messagebox.showerror("Error", str(e))
             return
+        recent_push("osd", path)
         self._add_footer.set(raw.endswith(OSD_FOOTER))
         blocks = _osd_parse_file(raw)
         if not blocks:
@@ -8651,12 +9011,17 @@ class RoomInitPanel(tk.Frame):
         _ri_style = ttk.Style()
         _ri_style.theme_use("default")
         _ri_style.configure("RoomInit.TCombobox",
-                            foreground="#111111",
-                            fieldbackground="#b8d0b8",
-                            background="#b8d0b8",
-                            selectforeground="#111111",
-                            selectbackground="#b8d0b8",
-                            arrowcolor="#111111")
+                            foreground="#7cfc7c",
+                            fieldbackground="#0b0b0b",
+                            background="#0b0b0b",
+                            selectforeground="#7cfc7c",
+                            selectbackground="#0b0b0b",
+                            arrowcolor="#7cfc7c")
+        # Fix the dropdown listbox background (defaults to white)
+        self.option_add("*TCombobox*Listbox.background", "#0b0b0b")
+        self.option_add("*TCombobox*Listbox.foreground", "#7cfc7c")
+        self.option_add("*TCombobox*Listbox.selectBackground", "#2a5a2a")
+        self.option_add("*TCombobox*Listbox.selectForeground", "#7cfc7c")
         hdr = tk.Frame(self, bg="#0e0e0e")
         hdr.pack(fill="x")
         tk.Label(hdr, text="ROOM INIT EDITOR",
@@ -9903,33 +10268,75 @@ def _launch_exe_identifier(root):
 #  Info Window Data  —  AR + EN
 # ══════════════════════════════════════════════════════════════════
 
-_INFO_AR_CODE_MANAGER = """## وش يسوي؟
-هذا القسم يجمع لك أكثر من 180 كود في مكان واحد، بواجهة مرتبة، وكل كود داخل قسمه الخاص.
+_INFO_AR_CODE_MANAGER = """## نظرة عامة
+هذا القسم يجمع لك أكثر من 180 كود في مكان واحد، بواجهة مرتبة، وكل كود داخل قسمه الخاص، وتفعّلها بضغطة واحدة بشكل منظم.
 
-## ما الفائدة؟
-تجميع جميع أكواد اللعبة وتنظيمها داخل مكان واحد لتسهيل الوصول والتعديل.
+## الأزرار والخيارات
 
-## الأسئلة الشائعة
+@Scan EXE → يشغل لك قسم Code Manager وأيضاً يكشف لك جميع الأكواد المفعلة حالياً.
 
-## كم عدد الأكواد؟
-تقريبًا 188 كود.
+On/Off → يبين لك حالة الكود.
++ ON = شغال
++ OFF = طافي
 
-## هل جميع الأكواد تعمل بضغطة زر؟
-لا، بعض الأكواد تحتاج إدخال قيم أو أرقام مخصصة، وبعضها يحتوي على خيارات متعددة.
+المربع الصغير (جمب On/Off) → يخليك تحدد الكود، وتقدر تحدد أكثر من كود بنفس الوقت.
 
-## هل يدعم أكواد ITA-AEV بحالاتها المختلفة؟
-نعم، جميع الحالات مدعومة. عند اختيار الكود تظهر لك الخيارات المتوفرة.
+@P → يثبت الكود بالأعلى ويصير أول واحد بقائمة الأكواد.
 
-## كيف أشغل القسم؟
-+ حدد مسار BIO4.EXE من قسم Master Editor
-+ ادخل إلى القسم
-+ اضغط Scan
+@Select All → يحدد جميع الأكواد الموجودة بهذا القسم.
 
-## هل أقدر أرجع الكود لوضعه الأصلي؟
-نعم، تقدر تطفي الكود وترجع الوضع الطبيعي.
+@Clear → يشيل التحديد عن جميع الأكواد المحددة.
 
-## هل أقدر أفعّل مجموعة أكواد بضغطة واحدة؟
-نعم، تقدر تنشئ مجموعة وتفعّلها مباشرة."""
+@Apply Selected → يشغل جميع الأكواد المحددة دفعة واحدة.
+
+@Settings → يبين لك الإعدادات الخاصة بهذا القسم.
+
+Search → يخليك تبحث عن اسم أي كود.
+
+Filter → يفلتر لك قائمة الأكواد ويبين المفعّل والغير مفعّل.
+
+@▼ → يبين لك الملاحظات الخاصة بالكود المحدد.
+
+@Apply → يطبق القيمة الي انت حاطها.
+
+Change → هذا نوع من الأكواد يفتح لك قائمة وتختار منها الخيار الي تبيه.
+
+Permanent (Only In Rt Mode) → يخلي الكود يشتغل بشكل دائم وقت استخدام Real-Time Editing Mode، ويطبق التغيير مباشرة على الـ EXE.
+
+## الأزرار داخل الإعدادات
+
+Silent Apply → يخلي تفعيل الأكواد يصير من دون رسالة تأكيد.
+
+Real-Time Editing Mode → يطبق الأكواد بالوقت الفعلي، يعني لما تفعل الكود بالأداة يتفعل باللعبة على طول.
+
+@New Profile → يخليك تسوي مجموعة أكواد.
+
+@Load Profile → يفعل مجموعة أكواد كاملة بضغطة واحدة.
+
+@Add New Code → يخليك تضيف كود جديد للأداة.
+
+@Compare Two EXEs → يقارن بين ملفين EXE ويبين لك وش الأكواد المفعلة في كل واحد.
+
+@Compare with Original → يقارن بين EXE حقك و EXE الأصلي.
+
+@View Log → يبين لك اللوج وتعرف وش الأكواد الي شغلتها وايش الي طفيتها.
+
+@Restore from Original → يستبدل bio4.exe حقك بالنسخة الأصلية.
+
+@Reset All Codes → يطفي جميع الأكواد الي انت فعلتها.
+
+## الحالات
+
+ON → الكود شغال.
+
+OFF → الكود طافي.
+
+P (بالأصفر) → الكود مثبت.
+
+## ملاحظات
+
++ الأداة غير مسؤولة عن أي كراش.
++ Rt Mode شوي خطير ويتطلب تشغيل الأداة كمسؤول (Administrator)."""
 
 _INFO_AR_OSD = """## وش يسوي؟
 يمكنك تعديل ملف OSD من خلال واجهة مرتبة وسهلة بدون الحاجة لاستخدام HxD.
@@ -10077,33 +10484,75 @@ _INFO_AR_SCRIPTS = """## وش يسوي؟
 
 # ── English ──────────────────────────────────────────────────────
 
-_INFO_EN_CODE_MANAGER = """## What does it do?
-Gathers more than 180 codes in one place with an organized interface, each code inside its own category.
+_INFO_EN_CODE_MANAGER = """## Overview
+Gathers more than 180 codes in one place with an organized interface, each code inside its own category. Enable codes with a single click in a well-organized way.
 
-## What is the benefit?
-Organizes all game codes into a single place to make access and modification easier.
+## Buttons & Options
 
-## Frequently Asked Questions
+@Scan EXE → Loads the Code Manager and detects all the codes that are currently enabled.
 
-## How many codes are available?
-Around 188 codes.
+On/Off → Shows whether the code is enabled or disabled.
++ ON = Enabled
++ OFF = Disabled
 
-## Do all codes work with a single button press?
-No. Some codes require custom values, and some contain multiple modes or options.
+Checkbox (next to On/Off) → Selects a code. You can select multiple codes at the same time.
 
-## Does it support ITA-AEV codes with multiple states?
-Yes. All states are supported. Once you select the code, available options appear.
+@P → Pins the code to the top of the code list.
 
-## How do I use this section?
-+ Set the BIO4.EXE path from Master Editor
-+ Open the section
-+ Press Scan
+@Select All → Selects all the codes in this section.
 
-## Can I disable a code after enabling it?
-Yes. You can disable the code and restore the original state.
+@Clear → Clears all the selected codes.
 
-## Can I activate a group of codes with one click?
-Yes. You can create code groups and activate them instantly."""
+@Apply Selected → Enables all the selected codes at once.
+
+@Settings → Opens the settings for this section.
+
+Search → Lets you search for any code by its name.
+
+Filter → Filters the code list and shows enabled or disabled codes.
+
+@▼ → Shows the notes for the selected code.
+
+@Apply → Applies the value you entered.
+
+Change → This type of code opens a list, allowing you to choose the option you want.
+
+Permanent (Only in RT Mode) → Keeps the code enabled permanently while using Real-Time Editing Mode and applies the change directly to the EXE.
+
+## Buttons inside Settings
+
+Silent Apply → Enables codes without showing a confirmation message.
+
+Real-Time Editing Mode → Applies codes in real time, so when you enable a code in the tool, it is activated immediately in the game.
+
+@New Profile → Lets you create a collection of codes.
+
+@Load Profile → Enables an entire collection of codes with one click.
+
+@Add New Code → Lets you add a new code to the tool.
+
+@Compare Two EXEs → Compares two EXE files and shows which codes are enabled.
+
+@Compare with Original → Compares your EXE with the original EXE.
+
+@View Log → Shows the log, allowing you to see which codes have been enabled or disabled.
+
+@Restore from Original → Replaces your bio4.exe with the original version.
+
+@Reset All Codes → Disables all the codes you have enabled.
+
+## Status
+
+ON → The code is enabled.
+
+OFF → The code is disabled.
+
+P (Yellow) → The code is pinned.
+
+## Notes
+
++ The tool is not responsible for any crashes.
++ RT Mode is slightly risky and requires running the tool as Administrator."""
 
 _INFO_EN_OSD = """## What does it do?
 Allows you to edit OSD files through a clean interface without using HxD.
@@ -10250,7 +10699,57 @@ Instead of searching manually, most scripts are available inside one section.
 ## Frequently Asked Questions
 The section is straightforward. No common questions."""
 
+_INFO_AR_MASTER = """## الأزرار والخيارات
+
+@Settings → يفتح لك قائمة الإعدادات، اللي منها تتحكم بإعدادات الأداة.
+
+@Credits → يبين لك الأشخاص الي اشتغلوا بالأداة وكل من ساهم في تطويرها.
+
+@Info → يبين لك معلومات عن جميع الأقسام ويشرح وش يسوي كل قسم وكل زر بداخله.
+
+@Browse → يفتح لك متصفح الملفات عشان تحدد ملف bio4.exe.
+
+@Create Backup → يسوي نسخة احتياطية من ملف bio4.exe حقك.
+
+## الأزرار داخل الإعدادات
+
+@EN/AR → يخليك تحدد لغة البرنامج.
+
+@Remember Last EXE Path → يخلي الأداة تتذكر مسار الـ EXE الي حددته، فلما تقفل الأداة وترجع تفتحها ما تحتاج تسوي Browse من جديد.
+
+@Open Last Used Panel on Startup → يخلي الأداة تفتح آخر قسم كنت فيه عند التشغيل. مثلاً لو كنت داخل AVL، تفتح الأداة على AVL مباشرة.
+
+@Check for Updates → يبحث عن تحديثات جديدة ويتأكد هل فيه تحديث متوفر أو لا.
+
+@Apply → يطبق جميع الإعدادات الي غيرتها."""
+
+_INFO_EN_MASTER = """## Buttons & Options
+
+@Settings → Opens the settings menu, where you can configure the tool's settings.
+
+@Credits → Shows the people who worked on the tool and everyone who contributed to its development.
+
+@Info → Displays information about every section and explains what each one and every button does.
+
+@Browse → Opens the file browser so you can select the bio4.exe file.
+
+@Create Backup → Creates a backup of your bio4.exe file.
+
+## Buttons inside Settings
+
+@EN/AR → Lets you choose the program language.
+
+@Remember Last EXE Path → Remembers the selected EXE file, so when you close and reopen the tool, you don't need to browse for it again.
+
+@Open Last Used Panel on Startup → Opens the last section you were using when the tool starts. For example, if you were in the AVL section, it will open AVL automatically.
+
+@Check for Updates → Checks whether a new update is available.
+
+@Apply → Applies all the settings you have changed."""
+
+
 _INFO_DATA_AR = {
+    "Master Editor":     ("Master Editor",      "#888888", _INFO_AR_MASTER),
     "Code Manager":      ("Code Manager",      "#5b9bd5", _INFO_AR_CODE_MANAGER),
     "OSD Editor":        ("OSD Editor",        "#c8a035", _INFO_AR_OSD),
     "CNS Editor":        ("CNS Editor",        "#e07b54", _INFO_AR_CNS),
@@ -10262,6 +10761,7 @@ _INFO_DATA_AR = {
     "Scripts":           ("Scripts",           "#5bc8c8", _INFO_AR_SCRIPTS),
 }
 _INFO_DATA_EN = {
+    "Master Editor":     ("Master Editor",      "#888888", _INFO_EN_MASTER),
     "Code Manager":      ("Code Manager",      "#5b9bd5", _INFO_EN_CODE_MANAGER),
     "OSD Editor":        ("OSD Editor",        "#c8a035", _INFO_EN_OSD),
     "CNS Editor":        ("CNS Editor",        "#e07b54", _INFO_EN_CNS),
@@ -10423,7 +10923,140 @@ def _show_update_dialog(master_win, latest_tag, dl_url, dl_size=0, changelog="")
         cl_sb.config(command=cl_txt.yview)
         cl_sb.pack(side="right", fill="y")
         cl_txt.pack(fill="x", padx=8, pady=(2, 6))
-        cl_txt.insert("1.0", changelog)
+
+        # ── Tags for Markdown-style rendering ──
+        cl_txt.tag_configure("h1",  font=("Courier New", 11, "bold"), foreground=_GOLD)
+        cl_txt.tag_configure("h2",  font=("Courier New", 10, "bold"), foreground="#e0c060")
+        cl_txt.tag_configure("h3",  font=("Courier New", 9,  "bold"), foreground="#c8b040")
+        cl_txt.tag_configure("hr",  font=("Courier New", 7),          foreground="#333333")
+        cl_txt.tag_configure("li",  font=("Courier New", 8),          foreground="#cccccc")
+        cl_txt.tag_configure("txt", font=("Courier New", 8),          foreground="#aaaaaa")
+
+        def _render_markdown(text):
+            """Parse GitHub Markdown and insert into cl_txt with tags."""
+            # Tags
+            cl_txt.tag_configure("h1",       font=("Courier New", 12, "bold"),  foreground=_GOLD)
+            cl_txt.tag_configure("h2",       font=("Courier New", 10, "bold"),  foreground="#e0c060")
+            cl_txt.tag_configure("h3",       font=("Courier New", 9,  "bold"),  foreground="#c8b040")
+            cl_txt.tag_configure("h4",       font=("Courier New", 8,  "bold"),  foreground="#b8a030")
+            cl_txt.tag_configure("h5",       font=("Courier New", 8,  "bold"),  foreground="#aaa030")
+            cl_txt.tag_configure("h6",       font=("Courier New", 8,  "bold"),  foreground="#999020")
+            cl_txt.tag_configure("hr",       font=("Courier New", 7),           foreground="#333333")
+            cl_txt.tag_configure("li",       font=("Courier New", 8),           foreground="#cccccc")
+            cl_txt.tag_configure("li2",      font=("Courier New", 8),           foreground="#aaaaaa")
+            cl_txt.tag_configure("li_done",  font=("Courier New", 8),           foreground="#7cfc7c")
+            cl_txt.tag_configure("li_todo",  font=("Courier New", 8),           foreground="#888888")
+            cl_txt.tag_configure("num",      font=("Courier New", 8),           foreground="#cccccc")
+            cl_txt.tag_configure("quote",    font=("Courier New", 8,  "italic"),foreground="#888888", lmargin1=12, lmargin2=12)
+            cl_txt.tag_configure("quote2",   font=("Courier New", 8,  "italic"),foreground="#666666", lmargin1=24, lmargin2=24)
+            cl_txt.tag_configure("code",     font=("Courier New", 8),           foreground="#7cd4d4", background="#111111")
+            cl_txt.tag_configure("codeblock",font=("Courier New", 8),           foreground="#7cd4d4", background="#0d0d0d", lmargin1=8, lmargin2=8)
+            cl_txt.tag_configure("note",     font=("Courier New", 8,  "bold"),  foreground="#60b8ff")
+            cl_txt.tag_configure("warning",  font=("Courier New", 8,  "bold"),  foreground="#ffaa40")
+            cl_txt.tag_configure("important",font=("Courier New", 8,  "bold"),  foreground="#ff6060")
+            cl_txt.tag_configure("txt",      font=("Courier New", 8),           foreground="#aaaaaa")
+
+            import re as _re
+
+            in_codeblock = False
+            lines = text.splitlines()
+            i = 0
+            while i < len(lines):
+                line = lines[i]
+                stripped = line.rstrip()
+
+                # ── Code block (``` ... ```) ──
+                if stripped.startswith("```"):
+                    in_codeblock = not in_codeblock
+                    i += 1
+                    continue
+                if in_codeblock:
+                    cl_txt.insert("end", stripped + "\n", "codeblock")
+                    i += 1
+                    continue
+
+                # ── Skip HTML comments <!-- --> ──
+                if stripped.startswith("<!--"):
+                    i += 1
+                    continue
+
+                # ── GitHub Alerts ──
+                if stripped.startswith("> [!NOTE]"):
+                    cl_txt.insert("end", "ℹ  NOTE\n", "note")
+                    i += 1
+                    continue
+                if stripped.startswith("> [!WARNING]"):
+                    cl_txt.insert("end", "⚠  WARNING\n", "warning")
+                    i += 1
+                    continue
+                if stripped.startswith("> [!IMPORTANT]"):
+                    cl_txt.insert("end", "★  IMPORTANT\n", "important")
+                    i += 1
+                    continue
+
+                # ── Headings ──
+                if stripped.startswith("###### "):
+                    cl_txt.insert("end", stripped[7:] + "\n", "h6"); i += 1; continue
+                if stripped.startswith("##### "):
+                    cl_txt.insert("end", stripped[6:] + "\n", "h5"); i += 1; continue
+                if stripped.startswith("#### "):
+                    cl_txt.insert("end", stripped[5:] + "\n", "h4"); i += 1; continue
+                if stripped.startswith("### "):
+                    cl_txt.insert("end", stripped[4:] + "\n", "h3"); i += 1; continue
+                if stripped.startswith("## "):
+                    cl_txt.insert("end", stripped[3:] + "\n", "h2"); i += 1; continue
+                if stripped.startswith("# "):
+                    cl_txt.insert("end", stripped[2:] + "\n", "h1"); i += 1; continue
+
+                # ── Horizontal rule ──
+                if _re.match(r'^(-{3,}|\*{3,}|_{3,})$', stripped):
+                    cl_txt.insert("end", "─" * 42 + "\n", "hr"); i += 1; continue
+
+                # ── Blockquote ──
+                if stripped.startswith(">> "):
+                    cl_txt.insert("end", "    " + stripped[3:] + "\n", "quote2"); i += 1; continue
+                if stripped.startswith("> "):
+                    cl_txt.insert("end", "  " + stripped[2:] + "\n", "quote"); i += 1; continue
+
+                # ── Checkbox list ──
+                if _re.match(r'^- \[x\] ', stripped, _re.IGNORECASE):
+                    cl_txt.insert("end", "  ✔ " + stripped[6:] + "\n", "li_done"); i += 1; continue
+                if _re.match(r'^- \[ \] ', stripped):
+                    cl_txt.insert("end", "  ☐ " + stripped[6:] + "\n", "li_todo"); i += 1; continue
+
+                # ── Bullet list (-, *, +) ──
+                if _re.match(r'^  [-*+] ', stripped):
+                    cl_txt.insert("end", "    ◦ " + stripped[4:] + "\n", "li2"); i += 1; continue
+                if _re.match(r'^[-*+] ', stripped):
+                    cl_txt.insert("end", "  • " + stripped[2:] + "\n", "li"); i += 1; continue
+
+                # ── Numbered list ──
+                m = _re.match(r'^(\d+)\. (.+)', stripped)
+                if m:
+                    cl_txt.insert("end", f"  {m.group(1)}. {m.group(2)}\n", "num"); i += 1; continue
+
+                # ── Inline code ` ` (strip, show plain) ──
+                stripped = _re.sub(r'`([^`]+)`', r'\1', stripped)
+
+                # ── Strip bold/italic markers (**,__,*,_,~~) ──
+                stripped = _re.sub(r'\*{3}(.+?)\*{3}', r'\1', stripped)
+                stripped = _re.sub(r'_{3}(.+?)_{3}',   r'\1', stripped)
+                stripped = _re.sub(r'\*{2}(.+?)\*{2}', r'\1', stripped)
+                stripped = _re.sub(r'_{2}(.+?)_{2}',   r'\1', stripped)
+                stripped = _re.sub(r'\*(.+?)\*',        r'\1', stripped)
+                stripped = _re.sub(r'_(.+?)_',          r'\1', stripped)
+                stripped = _re.sub(r'~~(.+?)~~',        r'\1', stripped)
+
+                # ── Strip links [text](url) → text ──
+                stripped = _re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', stripped)
+
+                # ── Strip HTML tags ──
+                stripped = _re.sub(r'<[^>]+>', '', stripped)
+
+                cl_txt.insert("end", stripped + "\n", "txt")
+                i += 1
+
+        _render_markdown(changelog)
         cl_txt.configure(state="disabled")
 
     tk.Label(dlg,
@@ -10718,7 +11351,13 @@ def _show_first_run_setup(parent_win, on_done):
     tk.Frame(dlg, bg="#1c1c1c", height=1).pack(fill="x", side="bottom")
 
 
-class RE4MasterEditor(tk.Tk):
+try:
+    from tkinterdnd2 import TkinterDnD as _TkDnD
+    _TkRoot = _TkDnD.Tk
+except Exception:
+    _TkRoot = tk.Tk
+
+class RE4MasterEditor(_TkRoot):
 
     def __init__(self):
         super().__init__()
@@ -10765,6 +11404,11 @@ class RE4MasterEditor(tk.Tk):
         self.exe_path.trace_add("write", self._on_exe_change)
         self._build_ui()
         self._show_welcome()
+        # Restore last opened panel
+        if MASTER_SETTINGS.get("remember_last_panel", False):
+            last_panel = MASTER_SETTINGS.get("last_panel", "")
+            if last_panel and any(t["id"] == last_panel for t in TOOLS_DEF):
+                self.after(300, lambda: self._switch_tool(last_panel))
         # Check for updates after 2 seconds (non-blocking)
         self.after(2000, lambda: _check_for_update(self, manual=False))
 
@@ -10781,7 +11425,7 @@ class RE4MasterEditor(tk.Tk):
                  font=("Courier New", 14, "bold")).pack(side="left", pady=8)
         tk.Label(left, text="MASTER EDITOR", fg="#dddddd", bg="#0c0c0c",
                  font=("Courier New", 14, "bold")).pack(side="left")
-        tk.Label(left, text="  v1.0.1", fg="#666666", bg="#0c0c0c",
+        tk.Label(left, text="  v2.0.0", fg="#666666", bg="#0c0c0c",
                  font=("Courier New", 7)).pack(side="left")
 
         # Right: Settings + Credit + Info
@@ -10810,6 +11454,11 @@ class RE4MasterEditor(tk.Tk):
         )
         self._path_entry.pack(side="left", ipady=3)
         self._add_paste_menu(self._path_entry)
+        _setup_drop(self._path_entry,
+                    lambda p: (self.exe_path.set(p),
+                               _highlight_drop(self._path_entry, True),
+                               self.after(600, lambda: _highlight_drop(self._path_entry, False))),
+                    allowed_exts=None)
         tk.Button(center, text=t("تصفح","Browse"),
                   font=("Courier New", 7),
                   fg=_GOLD, bg="#1a1500",
@@ -10971,7 +11620,7 @@ class RE4MasterEditor(tk.Tk):
     def _show_credit(self):
         dlg = tk.Toplevel(self)
         dlg.title(t("المطورين","Credit"))
-        dlg.geometry("480x300")
+        dlg.geometry("480x420")
         dlg.resizable(False, False)
         dlg.configure(bg="#0b0b0b")
         dlg.grab_set()
@@ -10980,33 +11629,55 @@ class RE4MasterEditor(tk.Tk):
                  fg="#c8a035", bg="#0b0b0b",
                  font=("Courier New", 12, "bold")).pack(pady=(20, 4))
 
-        credit_text = (
-            t(
-                "الأداة بواسطة : اليمني\n\n"
-                "محرر تهيئة الغرف ومحرر الصوت\n"
-                "ومحرر الأسلحة والعناصر بواسطة : Player7z\n\n"
-                "الكود مكتوب بواسطة : Claude AI\n\n"
-                "ملاحظة لمحرر الأسلحة والعناصر:\n"
-                "الكود المصدري تمت مشاركته بشكل خاص.\n"
-                "لن تجد هذا القسم على GitHub\n"
-                "لأن Player7z اختار عدم نشره بشكل عام.\n"
-                "شكر خاص لـ Player7z.",
-                "Tool by : YEMENI\n\n"
-                "Room Init Editor And Snd Editor\n"
-                "And Weapon And Items Editor by : Player7z\n\n"
-                "Code Written By : Claude AI\n\n"
-                "Note for Weapons and Items Editor:\n"
-                "The source code was shared privately.\n"
-                "You won't find this section on GitHub\n"
-                "because Player7z chose not to publish it publicly.\n"
-                "Special thanks to Player7z."
-            )
-        )
+        def _make_inline(parent, prefix, name, url, suffix=""):
+            row = tk.Frame(parent, bg="#0b0b0b")
+            row.pack()
+            if prefix:
+                tk.Label(row, text=prefix, fg="#aaaaaa", bg="#0b0b0b",
+                         font=("Courier New", 9), justify="center").pack(side="left")
+            lnk = tk.Label(row, text=name, fg="#5b9bd5", bg="#0b0b0b",
+                           font=("Courier New", 9, "underline"), cursor="hand2")
+            lnk.pack(side="left")
+            lnk.bind("<Button-1>", lambda e, u=url: webbrowser.open_new_tab(u))
+            lnk.bind("<Enter>", lambda e: lnk.configure(fg="#7cb8e8"))
+            lnk.bind("<Leave>", lambda e: lnk.configure(fg="#5b9bd5"))
+            if suffix:
+                tk.Label(row, text=suffix, fg="#aaaaaa", bg="#0b0b0b",
+                         font=("Courier New", 9), justify="center").pack(side="left")
 
-        tk.Label(dlg, text=credit_text,
-                 fg="#aaaaaa", bg="#0b0b0b",
-                 font=("Courier New", 9),
-                 justify="center").pack(padx=20, pady=8)
+        def _make_text(parent, text):
+            tk.Label(parent, text=text, fg="#aaaaaa", bg="#0b0b0b",
+                     font=("Courier New", 9), justify="center").pack()
+
+        body = tk.Frame(dlg, bg="#0b0b0b")
+        body.pack(padx=20, pady=8)
+
+        if CURRENT_LANG == "ar":
+            _make_inline(body, "الأداة بواسطة : ", "اليمني", "https://github.com/YEMENI-modder")
+            tk.Frame(body, height=8, bg="#0b0b0b").pack()
+            _make_text(body, "محرر تهيئة الغرف ومحرر الصوت")
+            _make_inline(body, "ومحرر الأسلحة والعناصر بواسطة : ", "Player7z", "https://youtube.com/@player-7z")
+            tk.Frame(body, height=8, bg="#0b0b0b").pack()
+            _make_inline(body, "الكود مكتوب بواسطة : ", "Claude AI", "https://claude.ai")
+            tk.Frame(body, height=8, bg="#0b0b0b").pack()
+            _make_text(body, "ملاحظة لمحرر الأسلحة والعناصر:")
+            _make_text(body, "الكود المصدري تمت مشاركته بشكل خاص.")
+            _make_text(body, "لن تجد هذا القسم على GitHub")
+            _make_text(body, "لأن Player7z اختار عدم نشره بشكل عام.")
+            _make_text(body, "شكر خاص لـ Player7z.")
+        else:
+            _make_inline(body, "Tool by : ", "YEMENI", "https://github.com/YEMENI-modder")
+            tk.Frame(body, height=8, bg="#0b0b0b").pack()
+            _make_text(body, "Room Init Editor And Snd Editor")
+            _make_inline(body, "And Weapon And Items Editor by : ", "Player7z", "https://youtube.com/@player-7z")
+            tk.Frame(body, height=8, bg="#0b0b0b").pack()
+            _make_inline(body, "Code Written By : ", "Claude AI", "https://claude.ai")
+            tk.Frame(body, height=8, bg="#0b0b0b").pack()
+            _make_text(body, "Note for Weapons and Items Editor:")
+            _make_text(body, "The source code was shared privately.")
+            _make_text(body, "You won't find this section on GitHub")
+            _make_text(body, "because Player7z chose not to publish it publicly.")
+            _make_text(body, "Special thanks to Player7z.")
 
         tk.Frame(dlg, bg="#c8a035", height=1).pack(fill="x", padx=20, pady=8)
 
@@ -11034,7 +11705,7 @@ class RE4MasterEditor(tk.Tk):
                  font=("Courier New", 12, "bold")).pack(side="left", padx=16, pady=8)
 
         _content_frame = [None]
-        _active_key    = ["Code Manager"]
+        _active_key    = ["Master Editor"]
 
         def _render(key):
             if _content_frame[0]:
@@ -11063,7 +11734,32 @@ class RE4MasterEditor(tk.Tk):
                      ).pack(anchor="e" if is_ar else "w", padx=28, pady=(24,4))
             tk.Frame(inner, bg="#1e1e1e", height=1).pack(fill="x", padx=28, pady=(0,16))
             for line in text.split("\n"):
-                if line.startswith("##"):
+                if line.startswith("@"):
+                    body = line[1:].strip()
+                    if "→" in body:
+                        bname, desc = body.split("→", 1)
+                    else:
+                        bname, desc = body, ""
+                    row = tk.Frame(inner, bg="#0b0b0b")
+                    row.pack(fill="x", padx=28, pady=2,
+                             anchor="e" if is_ar else "w")
+                    fake_btn = tk.Button(row, text=bname.strip(),
+                             font=("Courier New", 8), fg=color, bg="#1a1a1a",
+                             relief="flat", bd=0, state="disabled",
+                             disabledforeground=color,
+                             highlightthickness=1, highlightbackground=color,
+                             padx=8, pady=2)
+                    desc_lbl = tk.Label(row, text=desc.strip(), fg="#aaaaaa", bg="#0b0b0b",
+                             font=("Courier New", 9),
+                             justify="right" if is_ar else "left",
+                             wraplength=420, anchor="e" if is_ar else "w")
+                    if is_ar:
+                        desc_lbl.pack(side="right", padx=(0,8))
+                        fake_btn.pack(side="right")
+                    else:
+                        fake_btn.pack(side="left")
+                        desc_lbl.pack(side="left", padx=(8,0))
+                elif line.startswith("##"):
                     tk.Label(inner, text=line[2:].strip(), fg=color, bg="#0b0b0b",
                              font=("Courier New", 10, "bold"),
                              anchor="e" if is_ar else "w"
@@ -11123,7 +11819,7 @@ class RE4MasterEditor(tk.Tk):
             ))
             nav_btns[key] = (btn, ind)
 
-        _switch("Code Manager")
+        _switch("Master Editor")
         win.after(50, lambda: (win.lift(), win.focus_force()))
 
 
@@ -11203,6 +11899,10 @@ class RE4MasterEditor(tk.Tk):
 
         label = next((t["label"] for t in TOOLS_DEF if t["id"] == tool_id), tool_id)
         self._status_var.set(label)
+        # Save last opened panel
+        if MASTER_SETTINGS.get("remember_last_panel", False):
+            MASTER_SETTINGS["last_panel"] = tool_id
+            save_master_settings(MASTER_SETTINGS)
 
     def _add_paste_menu(self, entry):
         menu = tk.Menu(entry, tearoff=0, bg="#1a1a1a", fg="#ccc",
@@ -11322,6 +12022,16 @@ class RE4MasterEditor(tk.Tk):
                        font=("Courier New", 9), relief="flat",
                        command=lambda: (
                            MASTER_SETTINGS.update({"remember_exe": rem_var.get()}),
+                           save_master_settings(MASTER_SETTINGS)
+                       )).pack(padx=24, anchor="w", pady=4)
+
+        panel_var = tk.BooleanVar(value=MASTER_SETTINGS.get("remember_last_panel", False))
+        tk.Checkbutton(dlg, text=t("فتح آخر قسم مستخدم عند التشغيل","Open last used panel on startup"),
+                       variable=panel_var, fg="#ccc", bg="#111",
+                       activebackground="#111", selectcolor="#1a1a1a",
+                       font=("Courier New", 9), relief="flat",
+                       command=lambda: (
+                           MASTER_SETTINGS.update({"remember_last_panel": panel_var.get()}),
                            save_master_settings(MASTER_SETTINGS)
                        )).pack(padx=24, anchor="w", pady=4)
 
