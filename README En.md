@@ -1,6 +1,6 @@
 # RE4 Master Editor
 
-[![Version](https://img.shields.io/badge/Version-1.0.1-red?style=flat-square)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases/latest)
+[![Version](https://img.shields.io/badge/Version-2.0.0-red?style=flat-square)](https://github.com/YEMENI-modder/Re4-Master-Editor/releases/latest)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Winlator%20%7C%20Linux%20Wine-blue?style=flat-square)
 [![Game](https://img.shields.io/badge/Game-RE4%20UHD%202014-darkred?style=flat-square&logo=capcom&logoColor=yellow)](https://store.steampowered.com/app/254700/Resident_Evil_4_2004/)
 ![Language](https://img.shields.io/badge/Language-🇺🇸%20EN%20%7C%20🇸🇦%20AR-green?style=flat-square)
