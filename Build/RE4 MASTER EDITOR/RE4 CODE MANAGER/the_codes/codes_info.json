@@ -1903,6 +1903,18 @@
       "detectable": true
     },
     {
+      "id": "chainsaw_plaga",
+      "section": "enemy",
+      "name": "غاندو المنشار يظهر البلاغا بعد قتله",
+      "name_en": "Allow Chainsaw To Have Plaga After Being Killed",
+      "desc": "يسمح لغاندو المنشار بإظهار البلاغا بعد قتله.",
+      "desc_en": "Allows the Chainsaw Ganado to show Plaga after being killed.",
+      "notes": [],
+      "notes_en": [],
+      "requires": [],
+      "detectable": true
+    },
+    {
       "id": "assist_aiming",
       "section": "gameplay",
       "name": "Assist Aiming",
